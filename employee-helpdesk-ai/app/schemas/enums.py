@@ -1,0 +1,28 @@
+from enum import Enum
+
+
+class DepartmentEnum(str, Enum):
+    HR = "HR"
+    IT_SUPPORT = "IT_SUPPORT"
+    ADMIN_FACILITIES = "ADMIN_FACILITIES"
+
+
+class CategoryEnum(str, Enum):
+
+    LEAVE_REQUEST = "LEAVE_REQUEST"
+    PAYROLL = "PAYROLL"
+    BENEFITS = "BENEFITS"
+
+    VPN_ACCESS = "VPN_ACCESS"
+    PASSWORD_RESET = "PASSWORD_RESET"
+    SOFTWARE_ISSUE = "SOFTWARE_ISSUE"
+
+    ACCESS_CARD = "ACCESS_CARD"
+    MEETING_ROOM = "MEETING_ROOM"
+    OFFICE_MAINTENANCE = "OFFICE_MAINTENANCE"
+
+class PriorityEnum(str, Enum):
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
