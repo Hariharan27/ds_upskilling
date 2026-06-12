@@ -5,6 +5,7 @@ class DepartmentEnum(str, Enum):
     HR = "HR"
     IT_SUPPORT = "IT_SUPPORT"
     ADMIN_FACILITIES = "ADMIN_FACILITIES"
+    GENERAL_SUPPORT = "GENERAL_SUPPORT"
 
 
 class CategoryEnum(str, Enum):
@@ -20,6 +21,8 @@ class CategoryEnum(str, Enum):
     ACCESS_CARD = "ACCESS_CARD"
     MEETING_ROOM = "MEETING_ROOM"
     OFFICE_MAINTENANCE = "OFFICE_MAINTENANCE"
+    
+    OTHER = "OTHER"
 
 class PriorityEnum(str, Enum):
     LOW = "LOW"
