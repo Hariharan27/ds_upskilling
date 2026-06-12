@@ -10,7 +10,7 @@ class Settings(BaseSettings):
         min_length=10
     )
     MODEL_NAME: str = (
-        "meta-llama/Llama-3.3-70B-Instruct-Turbo"
+        "openai/gpt-oss-20b"
     )
 
     TEMPERATURE: float = 0.2
@@ -21,8 +21,10 @@ class Settings(BaseSettings):
 
     MAX_RETRIES: int = 3
 
+    RETRY_DELAY_SECONDS: int = 2
+
     class Config:
-        env_file = ".env"
+        env_file = "app/.env"
 
 
 settings = Settings()

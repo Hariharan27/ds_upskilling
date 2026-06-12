@@ -8,6 +8,10 @@ from app.schemas.response import (
     TicketClassificationResponse
 )
 
+from app.services.classification.classifier_service import (
+    ClassifierService
+)
+
 from app.schemas.enums import (
     DepartmentEnum,
     CategoryEnum,
@@ -25,10 +29,9 @@ async def classify_ticket(
     request: TicketClassificationRequest
 ):
 
-    return TicketClassificationResponse(
-        department=DepartmentEnum.IT_SUPPORT,
-        category=CategoryEnum.VPN_ACCESS,
-        priority=PriorityEnum.MEDIUM,
-        summary="Temporary response",
-        employee_response="Temporary response"
+    service = ClassifierService()
+
+    return service.classify(
+        employee_message=request.message
     )
+
