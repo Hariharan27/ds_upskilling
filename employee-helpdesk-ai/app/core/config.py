@@ -17,6 +17,8 @@ class Settings(BaseSettings):
 
     MODEL_OUTPUT_COST_PER_MILLION: float = 0.20
 
+    CLASSIFIER_PROMPT_VERSION: str = "v1"
+
     TEMPERATURE: float = 0.2
 
     MAX_TOKENS: int = 300

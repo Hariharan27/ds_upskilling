@@ -30,7 +30,7 @@ class CostResponse(BaseModel):
     output_cost_usd: float
 
     total_cost_usd: float
-    
+
 
 class ClassificationApiResponse(BaseModel):
 
@@ -39,5 +39,7 @@ class ClassificationApiResponse(BaseModel):
     usage: UsageResponse
 
     cost: CostResponse
+
+    prompt_version: str
 
 

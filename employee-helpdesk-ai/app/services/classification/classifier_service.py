@@ -27,6 +27,13 @@ from app.services.cost.cost_calculator import (
 
 from app.core.logging_config import logger
 
+from app.services.prompts.versions import PromptVersion
+
+from app.services.prompts.prompt_selector import (
+    PromptSelector
+)
+
+
 
 class ClassifierService:
 
@@ -49,7 +56,15 @@ class ClassifierService:
                 "Potential prompt injection detected"
             )
 
-        messages = build_messages(employee_message)
+        selected_version = (
+            PromptSelector.select()
+        )
+
+        logger.info(
+            f"Prompt Version={selected_version}"
+        )
+
+        messages = build_messages(employee_message,selected_version)
 
         response = self.llm_client.generate(
             messages=messages
@@ -80,6 +95,7 @@ class ClassifierService:
         classification = ClassificationApiResponse(
             classification = classification,
             usage=response.usage,
-            cost=cost
+            cost=cost,
+            prompt_version=selected_version
         )
         return classification
