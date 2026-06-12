@@ -5,25 +5,21 @@ from app.schemas.request import (
 )
 
 from app.schemas.response import (
-    TicketClassificationResponse
+    ClassificationApiResponse
 )
 
 from app.services.classification.classifier_service import (
     ClassifierService
 )
 
-from app.schemas.enums import (
-    DepartmentEnum,
-    CategoryEnum,
-    PriorityEnum
-)
+
 
 router = APIRouter()
 
 
 @router.post(
     "/tickets/classify",
-    response_model=TicketClassificationResponse
+    response_model=ClassificationApiResponse
 )
 async def classify_ticket(
     request: TicketClassificationRequest

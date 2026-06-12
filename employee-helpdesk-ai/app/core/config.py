@@ -13,6 +13,10 @@ class Settings(BaseSettings):
         "openai/gpt-oss-20b"
     )
 
+    MODEL_INPUT_COST_PER_MILLION: float = 0.05
+
+    MODEL_OUTPUT_COST_PER_MILLION: float = 0.20
+
     TEMPERATURE: float = 0.2
 
     MAX_TOKENS: int = 300

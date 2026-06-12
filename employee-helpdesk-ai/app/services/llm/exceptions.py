@@ -15,3 +15,6 @@ class LLMProviderError(Exception):
 
 class EmptyLLMResponseError(LLMProviderError):
     pass
+
+class PromptInjectionError(Exception):
+    pass

@@ -2,6 +2,7 @@ import time
 
 from together import Together
 from app.core.config import settings
+from app.schemas.response import UsageResponse
 from app.services.llm.models import (
     LLMResponse
 )
@@ -10,6 +11,8 @@ LLMServiceError,
 LLMResponseError
 )
 from together.types.chat import completion_create_params
+
+from app.core.logging_config import logger
 
 
 
@@ -27,11 +30,17 @@ class TogetherClient:
 
         response = None
 
+        usage = None
+
+        prompt_tokens = 0
+        completion_tokens = 0
+        total_tokens = 0
+
         for attempt in range(settings.MAX_RETRIES):
 
             try:
 
-                print(
+                logger.info(
                     f"LLM request attempt {attempt + 1}"
                 )
 
@@ -42,11 +51,24 @@ class TogetherClient:
                     max_tokens=settings.MAX_TOKENS
                 )
 
+                usage = response.usage
+
+                if usage is not None:
+                    prompt_tokens = usage.prompt_tokens
+                    completion_tokens = usage.completion_tokens
+                    total_tokens = usage.total_tokens
+                    logger.info(
+                        f"Token Usage | "
+                        f"Input={prompt_tokens} | "
+                        f"Output={completion_tokens} | "
+                        f"Total={total_tokens}"
+                    )
+
                 break
 
             except Exception as ex:
 
-                print(
+                logger.error(
                     f"Attempt {attempt + 1} failed: {str(ex)}"
                 )
 
@@ -71,5 +93,10 @@ class TogetherClient:
 
         return LLMResponse(
             content=content,
-            model=settings.MODEL_NAME
+            model=settings.MODEL_NAME,
+            usage= UsageResponse(
+                input_tokens= prompt_tokens,
+                output_tokens= completion_tokens,
+                total_tokens= total_tokens
+            )
         )
