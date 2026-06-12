@@ -1,1 +1,8 @@
-CLASSIFIER_PROMPT_VERSION = "v1"
+from enum import Enum
+
+
+class PromptVersion(str, Enum):
+
+    V1 = "v1"
+
+    V2 = "v2"
