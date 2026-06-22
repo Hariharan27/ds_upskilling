@@ -1,0 +1,274 @@
+{
+    "Certification Reimbursement Policy 1 1.pdf": {
+        "document_id": "Certification Reimbursement Policy 1 1",
+        "file_name": "Certification Reimbursement Policy 1 1.pdf",
+        "file_hash": "1d8d179506ff79ad91659bcf14f31f05d46f1bfa6008d925ee23c12ea7829f83",
+        "department": "HR",
+        "category": "certification",
+        "indexed_at": "2026-06-22T07:18:38.818673"
+    },
+    "Code of Conduct.pdf": {
+        "document_id": "Code of Conduct",
+        "file_name": "Code of Conduct.pdf",
+        "file_hash": "77100ca6cdb67b123d0145b3276c096d482ee5e2948f0b9d2bb810e1ed405c83",
+        "department": "CORPORATE_GOVERNANCE",
+        "category": "code_of_conduct",
+        "indexed_at": "2026-06-22T07:18:39.045455"
+    },
+    "Employee Benefits Policy - Newly Wed_Newborn.pdf": {
+        "document_id": "Employee Benefits Policy - Newly Wed_Newborn",
+        "file_name": "Employee Benefits Policy - Newly Wed_Newborn.pdf",
+        "file_hash": "8009988a465d550364bd4801f41c4264588a41e4c9e8b41abb4b50a0e0f14da8",
+        "department": "HR",
+        "category": "benefits",
+        "indexed_at": "2026-06-22T07:18:39.114343"
+    },
+    "Holiday List - 2026.pdf": {
+        "document_id": "Holiday List - 2026",
+        "file_name": "Holiday List - 2026.pdf",
+        "file_hash": "b9ddcadd4e99703839c317f07ae9296372e8776453019388a3ee7d507512cc30",
+        "department": "HR",
+        "category": "holiday",
+        "indexed_at": "2026-06-22T07:18:39.163761"
+    },
+    "I2I_Access Allocation Policy.pdf": {
+        "document_id": "I2I_Access Allocation Policy",
+        "file_name": "I2I_Access Allocation Policy.pdf",
+        "file_hash": "520718d7745c31037a234f1a0b80879900147e3f3523ffa4a7f57cc9279d21ca",
+        "department": "IT_SECURITY",
+        "category": "access_management",
+        "indexed_at": "2026-06-22T07:18:39.274510"
+    },
+    "I2I_Asset Management Policy.pdf": {
+        "document_id": "I2I_Asset Management Policy",
+        "file_name": "I2I_Asset Management Policy.pdf",
+        "file_hash": "b851dbbfaf6844b0448d407c6cb3919d143da35012bd038930372537f6af45b2",
+        "department": "IT_SECURITY",
+        "category": "asset_management",
+        "indexed_at": "2026-06-22T07:18:39.372669"
+    },
+    "I2I_Change Management Policy.pdf": {
+        "document_id": "I2I_Change Management Policy",
+        "file_name": "I2I_Change Management Policy.pdf",
+        "file_hash": "7bf8cfdefbb56af85267fd8ec42a2e6549a346fe4a2a4e58e9901b9f8085b7a7",
+        "department": "IT_SECURITY",
+        "category": "change_management",
+        "indexed_at": "2026-06-22T07:18:39.463904"
+    },
+    "I2I_Copyright and Compliance Policy.pdf": {
+        "document_id": "I2I_Copyright and Compliance Policy",
+        "file_name": "I2I_Copyright and Compliance Policy.pdf",
+        "file_hash": "fff1a2ef30dbef87f4a66bdb1b33838b0ea9861135bedd8f801ca30dfec58ee1",
+        "department": "IT_SECURITY",
+        "category": "compliance",
+        "indexed_at": "2026-06-22T07:18:39.560106"
+    },
+    "I2I_Data Backup Policy.pdf": {
+        "document_id": "I2I_Data Backup Policy",
+        "file_name": "I2I_Data Backup Policy.pdf",
+        "file_hash": "925aa5b0961bf3c89ed72f7ac7b77172d90c5d514ec92793e44de00544a332aa",
+        "department": "IT_SECURITY",
+        "category": "data_security",
+        "indexed_at": "2026-06-22T07:18:39.654146"
+    },
+    "I2I_Data Encryption Decryption Policy.pdf": {
+        "document_id": "I2I_Data Encryption Decryption Policy",
+        "file_name": "I2I_Data Encryption Decryption Policy.pdf",
+        "file_hash": "16f11a8c61e5a478aff9f1362d0782e0c46f4965a77a41772a3b4bf5d661cb50",
+        "department": "IT_SECURITY",
+        "category": "data_security",
+        "indexed_at": "2026-06-22T07:18:39.749091"
+    },
+    "I2I_Disaster Recovery Policy.pdf": {
+        "document_id": "I2I_Disaster Recovery Policy",
+        "file_name": "I2I_Disaster Recovery Policy.pdf",
+        "file_hash": "3359c81178c0f208c5b0a2faf403db7a921b7fa51845b6f38a0c4289d786cb9b",
+        "department": "IT_SECURITY",
+        "category": "disaster_recovery",
+        "indexed_at": "2026-06-22T07:18:39.849516"
+    },
+    "I2I_Internal Audit Policy.pdf": {
+        "document_id": "I2I_Internal Audit Policy",
+        "file_name": "I2I_Internal Audit Policy.pdf",
+        "file_hash": "c050060fa3d2c7a0a5c431b2c282a92be37615880826c091be9d42ccc1375b74",
+        "department": "IT_SECURITY",
+        "category": "asset_management",
+        "indexed_at": "2026-06-22T07:18:39.937279"
+    },
+    "I2I_Laptop Security Policy.pdf": {
+        "document_id": "I2I_Laptop Security Policy",
+        "file_name": "I2I_Laptop Security Policy.pdf",
+        "file_hash": "b61d716768fc0742f9508461ac37cea1797e8235a59ea448f0f4dcd2f2a26a62",
+        "department": "IT_SECURITY",
+        "category": "endpoint_security",
+        "indexed_at": "2026-06-22T07:18:40.144620"
+    },
+    "I2I_Malware Prevention Policy.pdf": {
+        "document_id": "I2I_Malware Prevention Policy",
+        "file_name": "I2I_Malware Prevention Policy.pdf",
+        "file_hash": "0cfd7822500fa67e74a1c63a8c2f3110d2d52f053cfad9525f783ed15ad2bbcd",
+        "department": "IT_SECURITY",
+        "category": "endpoint_security",
+        "indexed_at": "2026-06-22T07:18:40.209057"
+    },
+    "I2I_Password Management Policy.pdf": {
+        "document_id": "I2I_Password Management Policy",
+        "file_name": "I2I_Password Management Policy.pdf",
+        "file_hash": "54b6f80c685ba23a336b13bd36fc8945a2671380d1347b95ea4f1c9ac20f6796",
+        "department": "IT_SECURITY",
+        "category": "endpoint_security",
+        "indexed_at": "2026-06-22T07:18:40.315875"
+    },
+    "I2I_Physical Security Policy.pdf": {
+        "document_id": "I2I_Physical Security Policy",
+        "file_name": "I2I_Physical Security Policy.pdf",
+        "file_hash": "7f2caf7422757447988e021eb9f5ee0abceb95e43eb9f8665daf3660b6390498",
+        "department": "IT_SECURITY",
+        "category": "physical_security",
+        "indexed_at": "2026-06-22T07:18:40.390832"
+    },
+    "I2I_Secure Development Practices.pdf": {
+        "document_id": "I2I_Secure Development Practices",
+        "file_name": "I2I_Secure Development Practices.pdf",
+        "file_hash": "02deb75e3ff631e3c1165ac1169d8289aa3e5c92d5b643549669409ea5908107",
+        "department": "IT_SECURITY",
+        "category": "secure_development",
+        "indexed_at": "2026-06-22T07:18:40.678784"
+    },
+    "I2I_User Registration and De-Registration Policy.pdf": {
+        "document_id": "I2I_User Registration and De-Registration Policy",
+        "file_name": "I2I_User Registration and De-Registration Policy.pdf",
+        "file_hash": "0d052dea27d0952b31b86def3f676c38998942c65655c9e10b38db422d1a81f2",
+        "department": "IT_SECURITY",
+        "category": "access_management",
+        "indexed_at": "2026-06-22T07:18:40.747644"
+    },
+    "I2I_Vendor Onboarding Policy.pdf": {
+        "document_id": "I2I_Vendor Onboarding Policy",
+        "file_name": "I2I_Vendor Onboarding Policy.pdf",
+        "file_hash": "864d254ef0c7d5d4e9ad3f7521ffd84d535902c362585c84a4d1d737ac3daa16",
+        "department": "CORPORATE_GOVERNANCE",
+        "category": "vendor_management",
+        "indexed_at": "2026-06-22T07:18:40.798637"
+    },
+    "I2I_Vendor Performance Evaluation Policy.pdf": {
+        "document_id": "I2I_Vendor Performance Evaluation Policy",
+        "file_name": "I2I_Vendor Performance Evaluation Policy.pdf",
+        "file_hash": "4f0d9f9152ac4e02849a65cd0fc0264e41bb45e22bcb84200913dbeec6a5ce4e",
+        "department": "CORPORATE_GOVERNANCE",
+        "category": "vendor_management",
+        "indexed_at": "2026-06-22T07:18:40.873881"
+    },
+    "I2I_Vulnerability Management Policy.pdf": {
+        "document_id": "I2I_Vulnerability Management Policy",
+        "file_name": "I2I_Vulnerability Management Policy.pdf",
+        "file_hash": "a28735c41c2bca8e022add6f7e47d55b5b11e3ddedffda9d3f9091c567c0a9bc",
+        "department": "IT_SECURITY",
+        "category": "vulnerability_management",
+        "indexed_at": "2026-06-22T07:18:40.984147"
+    },
+    "I2I_Whistle Blower Policy.pdf": {
+        "document_id": "I2I_Whistle Blower Policy",
+        "file_name": "I2I_Whistle Blower Policy.pdf",
+        "file_hash": "ce0de94b0de23ad889c30e6ea09bbe69e61202e0d4b6377a8686a8ee9db94b57",
+        "department": "CORPORATE_GOVERNANCE",
+        "category": "whistle_blower",
+        "indexed_at": "2026-06-22T07:18:41.067918"
+    },
+    "ID, Access Card and Locker Management Policy.pdf": {
+        "document_id": "ID, Access Card and Locker Management Policy",
+        "file_name": "ID, Access Card and Locker Management Policy.pdf",
+        "file_hash": "161a153638c9aeca680df32744ffc4ef1eed585b8bd384497a8bb9aa4f9fb43f",
+        "department": "IT_SECURITY",
+        "category": "access_management",
+        "indexed_at": "2026-06-22T07:18:41.149011"
+    },
+    "IT Policy.pdf": {
+        "document_id": "IT Policy",
+        "file_name": "IT Policy.pdf",
+        "file_hash": "da5d944fee35f8b6c05123a5f7d85703bee1c9a9336c8e4e6638a157f6ef27b9",
+        "department": "IT_SECURITY",
+        "category": "asset_management",
+        "indexed_at": "2026-06-22T07:18:41.233239"
+    },
+    "Karnataka Holiday List - 2026.pdf": {
+        "document_id": "Karnataka Holiday List - 2026",
+        "file_name": "Karnataka Holiday List - 2026.pdf",
+        "file_hash": "50398f6f89c87c19508bd1fef4e2f0677ef31e78c6c6a8f44de49e14001666a6",
+        "department": "HR",
+        "category": "holiday",
+        "indexed_at": "2026-06-22T07:18:41.285033"
+    },
+    "QMS - Incident Reporting SLA Policy & Process (1).pdf": {
+        "document_id": "QMS - Incident Reporting SLA Policy & Process (1)",
+        "file_name": "QMS - Incident Reporting SLA Policy & Process (1).pdf",
+        "file_hash": "f5d6fecc946d93ce798e4ddc75446ea6742a51d1b890f7497c03c14c0a649276",
+        "department": "IT_SECURITY",
+        "category": "incident_management",
+        "indexed_at": "2026-06-22T07:18:41.385808"
+    },
+    "QMS - Incident Reporting SLA Policy & Process.pdf": {
+        "document_id": "QMS - Incident Reporting SLA Policy & Process",
+        "file_name": "QMS - Incident Reporting SLA Policy & Process.pdf",
+        "file_hash": "f5d6fecc946d93ce798e4ddc75446ea6742a51d1b890f7497c03c14c0a649276",
+        "department": "IT_SECURITY",
+        "category": "incident_management",
+        "indexed_at": "2026-06-22T07:18:41.460075"
+    },
+    "Revised Leave Policy - I2I.pdf": {
+        "document_id": "Revised Leave Policy - I2I",
+        "file_name": "Revised Leave Policy - I2I.pdf",
+        "file_hash": "98abb949fa5c240e16786b63e7eda3b1f1e9b46a7519a35779a2da4008d8a38b",
+        "department": "HR",
+        "category": "leave",
+        "indexed_at": "2026-06-22T07:18:41.633681"
+    },
+    "Rewards and Recognition Policy.pdf": {
+        "document_id": "Rewards and Recognition Policy",
+        "file_name": "Rewards and Recognition Policy.pdf",
+        "file_hash": "33a9861bc571e97054ce32e08ad9debbb4815187cd8b0716b9165236bc65765b",
+        "department": "HR",
+        "category": "rewards",
+        "indexed_at": "2026-06-22T07:18:41.717785"
+    },
+    "Staff Loan Policy - 2025.pdf": {
+        "document_id": "Staff Loan Policy - 2025",
+        "file_name": "Staff Loan Policy - 2025.pdf",
+        "file_hash": "099c27a9525743f5f8948e4208db174f8cd330612d9010d113c47937cfb36596",
+        "department": "HR",
+        "category": "staff_loan",
+        "indexed_at": "2026-06-22T07:18:41.800929"
+    },
+    "Staff Loan Policy.pdf": {
+        "document_id": "Staff Loan Policy",
+        "file_name": "Staff Loan Policy.pdf",
+        "file_hash": "a336fea11f226a6ef1ae607bd9e19726361e2cc6dcf88c1a91de00fac7a8a59f",
+        "department": "HR",
+        "category": "staff_loan",
+        "indexed_at": "2026-06-22T07:18:41.853408"
+    },
+    "Team Outing Policy.pdf": {
+        "document_id": "Team Outing Policy",
+        "file_name": "Team Outing Policy.pdf",
+        "file_hash": "654cd5e5b9a8544bbd46d75b7e3128e06bb7c968bab2ad5d6f69dae1323a0ea7",
+        "department": "HR",
+        "category": "team_outing",
+        "indexed_at": "2026-06-22T07:18:41.938923"
+    },
+    "USA Holiday List - 2026.pdf": {
+        "document_id": "USA Holiday List - 2026",
+        "file_name": "USA Holiday List - 2026.pdf",
+        "file_hash": "3d6644b335737a0c6f09a24846e54286c0246a4e2827fc004ecdcc0ef782d3f5",
+        "department": "HR",
+        "category": "holiday",
+        "indexed_at": "2026-06-22T07:18:41.999625"
+    },
+    "Work from Home - Hybrid Policy.pdf": {
+        "document_id": "Work from Home - Hybrid Policy",
+        "file_name": "Work from Home - Hybrid Policy.pdf",
+        "file_hash": "43c321c3671e104399e5112058c3140979a17f0bc9c7269c113c06df9d8dda24",
+        "department": "HR",
+        "category": "wfh",
+        "indexed_at": "2026-06-22T07:18:42.086856"
+    }
+}

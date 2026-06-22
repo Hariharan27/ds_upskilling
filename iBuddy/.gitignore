@@ -1,0 +1,21 @@
+# Virtual Environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Mac
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# ChromaDB Storage
+chroma_db/
+
+# Logs
+*.log
