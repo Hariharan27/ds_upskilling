@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 
-from chromadb.utils import results
-
 from app.domain.entities.search_result import SearchResult
 
 

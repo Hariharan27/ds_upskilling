@@ -8,6 +8,8 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 
 
 class Settings(BaseSettings):
+    assistant_name: str = "iBuddy"
+
     # Embeddings
     embedding_model: str = "all-MiniLM-L6-v2"
 

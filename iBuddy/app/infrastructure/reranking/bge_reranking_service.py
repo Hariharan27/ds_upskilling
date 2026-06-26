@@ -46,7 +46,7 @@ class BGERerankingService(
 
         return [
             result
-            for result,_ in score_results[:top_k]
+            for _,result in score_results[:top_k]
         ]
 
 
