@@ -133,7 +133,8 @@ class IndexingOrchestrator:
 
         document = (
             self._document_loader.load(
-                file_path
+                file_path,
+                metadata,
             )
         )
 

@@ -25,6 +25,7 @@ class VectorStoreRepository(ABC):
     def search(self,
                query_embeddings: list[float],
                top_k: int  = 5,
+                metadata_filter: dict[str, str] | None = None,
                ) -> list[SearchResult]:
         """
         Perform similarity search.

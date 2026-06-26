@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 from app.domain.services.embedding_service import (
     EmbeddingService,
 )
-
+from app.shared.config import get_settings
 
 class SentenceTransformerEmbeddingService(
     EmbeddingService
@@ -15,10 +15,12 @@ class SentenceTransformerEmbeddingService(
 
     def __init__(
             self,
-            model_name: str = "all-MiniLM-L6-v2",
+            model_name: str|None = None,
     ) -> None:
+
+        settings = get_settings()
         self._model = SentenceTransformer(
-            model_name
+            model_name or settings.embedding_model
         )
 
     def embed_text(
@@ -32,6 +34,7 @@ class SentenceTransformerEmbeddingService(
         embedding = self._model.encode(
             text,
             convert_to_numpy=True,
+            normalize_embeddings=True,
         )
 
         return embedding.tolist()
@@ -48,6 +51,7 @@ class SentenceTransformerEmbeddingService(
         embeddings = self._model.encode(
             texts,
             convert_to_numpy=True,
+            normalize_embeddings=True,
         )
 
         return embeddings.tolist()

@@ -1,0 +1,134 @@
+import time
+
+from together import Together
+from together.types.chat import completion_create_params
+from together.types.chat.completion_create_params import MessageChatCompletionSystemMessageParam, \
+    MessageChatCompletionUserMessageParam
+
+from app.domain.models.llm_request import (
+    LLMRequest,
+)
+from app.domain.models.llm_response import (
+    LLMResponse,
+)
+from app.domain.services.llm_client import (
+    LLMClient,
+)
+from app.shared.config import (
+    get_settings,
+)
+from app.shared.constants.constants import SYSTEM_ROLE, USER_ROLE
+from app.shared.exceptions.llm import (
+    LLMClientError,
+    LLMResponseError,
+)
+
+
+class TogetherLLMClient(
+    LLMClient,
+):
+    """
+    Together AI implementation
+    of the LLMClient.
+    """
+
+    def __init__(self) -> None:
+
+        self._settings = get_settings()
+
+        if not self._settings.together_api_key:
+            raise ValueError(
+                "TOGETHER_API_KEY is not configured."
+            )
+
+        self._client = Together(
+            api_key=self._settings.together_api_key,
+        )
+
+    def generate_text(
+        self,
+        request: LLMRequest,
+    ) -> LLMResponse:
+
+        response = None
+
+        for attempt in range(
+            self._settings.max_retries,
+        ):
+
+            try:
+
+                response = (
+                    self._client.chat.completions.create(
+                        model=self._settings.together_model,
+                        messages=self._build_messages(
+                            request,
+                        ),
+                        temperature=request.temperature,
+                        max_tokens=request.max_tokens,
+                    )
+                )
+
+                break
+
+            except Exception as ex:
+
+                print(ex)
+                if (
+                    attempt
+                    == self._settings.max_retries - 1
+                ):
+                    raise LLMClientError(
+                        "Failed to generate LLM response."
+                    ) from ex
+
+                time.sleep(
+                    self._settings.retry_delay_seconds,
+                )
+
+        if response is None:
+            raise LLMClientError(
+                "No response received from Together AI."
+            )
+
+        if not response.choices:
+            raise LLMResponseError(
+                "No choices returned by Together AI."
+            )
+
+        content = (
+            response.choices[0]
+            .message.content
+        )
+
+        if not content:
+            raise LLMResponseError(
+                "Empty response returned by Together AI."
+            )
+
+        usage = response.usage
+
+        return LLMResponse(
+            content=content,
+            input_tokens=usage.prompt_tokens,
+            output_tokens=usage.completion_tokens,
+            total_tokens=usage.total_tokens,
+        )
+
+    @staticmethod
+    def _build_messages(
+            request: LLMRequest,
+    ) -> list[completion_create_params.Message]:
+
+        messages: list[completion_create_params.Message] = [
+            MessageChatCompletionSystemMessageParam(
+                content=request.system_prompt,
+                role=SYSTEM_ROLE,
+            ),
+            MessageChatCompletionUserMessageParam(
+                content=request.user_prompt,
+                role=USER_ROLE,
+            ),
+        ]
+
+        return messages

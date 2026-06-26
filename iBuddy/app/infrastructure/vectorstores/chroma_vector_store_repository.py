@@ -9,6 +9,9 @@ from app.domain.repositories.vector_store_repository import (
 from app.domain.entities.search_result import (
     SearchResult,
 )
+from app.shared.config import get_settings
+
+
 
 class ChromaVectorStoreRepository(
     VectorStoreRepository
@@ -17,21 +20,23 @@ class ChromaVectorStoreRepository(
     ChromaDB implementation of
     VectorStoreRepository.
     """
-
-    COLLECTION_NAME = "ibuddy_documents"
-
     def __init__(
         self,
-        db_path: str = "chroma_db",
+        db_path: str|None = None,
     ) -> None:
 
+        settings = get_settings()
+
         self._client = PersistentClient(
-            path=db_path,
+            path= ( db_path or settings.chroma_db_path),
         )
 
         self._collection = (
             self._client.get_or_create_collection(
-                name=self.COLLECTION_NAME,
+                name= settings.chroma_collection_name,
+                metadata={
+                    "hnsw:space": "cosine",
+                },
             )
         )
 
@@ -59,6 +64,8 @@ class ChromaVectorStoreRepository(
                     "document_id": chunk.document_id,
                     "file_name": chunk.file_name,
                     "chunk_index": chunk.chunk_index,
+                    "department":  chunk.metadata["department"],
+                    "category": chunk.metadata["category"],
                 }
                 for chunk in chunks
             ],
@@ -68,6 +75,7 @@ class ChromaVectorStoreRepository(
             self,
             query_embedding: list[float],
             top_k: int = 5,
+            metadata_filter: dict[str, str] | None = None,
     ) -> list[SearchResult]:
         """
         Search similar chunks.
@@ -76,6 +84,7 @@ class ChromaVectorStoreRepository(
         response = self._collection.query(
             query_embeddings=[query_embedding],
             n_results=top_k,
+            where = metadata_filter
         )
 
         results = []

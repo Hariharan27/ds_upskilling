@@ -1,9 +1,11 @@
+from dataclasses import asdict
 from pathlib import Path
 
 import fitz
 
 from app.domain.entities.document import Document
 from app.domain.services.document_loader import DocumentLoader
+from app.domain.value_objects.document_metadata import DocumentMetadata
 from app.shared.exceptions.document_load_exception import (
     DocumentLoadException,
 )
@@ -17,6 +19,7 @@ class PdfDocumentLoader(DocumentLoader):
     def load(
         self,
         file_path: str,
+        metadata: DocumentMetadata,
     ) -> Document:
         """
         Load a PDF file and convert it
@@ -54,7 +57,7 @@ class PdfDocumentLoader(DocumentLoader):
                 file_name=path.name,
                 file_path=str(path),
                 content=content,
-                metadata={},
+                metadata= asdict(metadata),
             )
 
         except DocumentLoadException:

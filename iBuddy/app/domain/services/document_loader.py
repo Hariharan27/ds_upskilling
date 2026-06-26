@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from app.domain.entities.document import Document
+from app.domain.value_objects.document_metadata import DocumentMetadata
 
 
 class DocumentLoader(ABC):
@@ -12,7 +13,8 @@ class DocumentLoader(ABC):
     @abstractmethod
     def load(
         self,
-        file_path: str
+        file_path: str,
+        metadata: DocumentMetadata,
     ) -> Document:
         """
         Load a file and convert it
