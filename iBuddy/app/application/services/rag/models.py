@@ -11,3 +11,6 @@ class RAGResponse(BaseModel):
     input_tokens: int
     output_tokens: int
     total_tokens: int
+
+class RAGRequest(BaseModel):
+    query: str

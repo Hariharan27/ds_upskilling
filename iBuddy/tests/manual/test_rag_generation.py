@@ -5,7 +5,7 @@ from app.application.services.query_expansion.llm_query_expansion_service import
     LlmQueryExpansionService,
 )
 from app.application.services.rag.models import (
-    RAGPromptRequest,
+    RAGPromptRequest, RAGRequest,
 )
 from app.application.services.rag.prompt_builder import (
     PromptBuilder,
@@ -87,9 +87,8 @@ def main() -> None:
         )
     )
 
-    request = RAGPromptRequest(
+    request = RAGRequest(
         query="How many days a new father get a leave?",
-        context="",
     )
 
     response = rag_service.generate(

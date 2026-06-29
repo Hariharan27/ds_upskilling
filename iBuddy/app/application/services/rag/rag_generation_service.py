@@ -1,6 +1,9 @@
+import time
+
 from app.application.services.rag.models import (
     RAGPromptRequest,
     RAGResponse,
+    RAGRequest,
 )
 from app.application.services.rag.prompt_builder import (
     PromptBuilder,
@@ -36,12 +39,16 @@ class RAGGenerationService:
 
     def generate(
         self,
-        request: RAGPromptRequest,
+        request: RAGRequest,
     ) -> RAGResponse:
+
+        overall_start = time.perf_counter()
 
         retrieval_request = RetrievalRequest(
             query=request.query,
         )
+
+        start = time.perf_counter()
 
         results = (
             self._retrieval_service.retrieve(
@@ -49,10 +56,22 @@ class RAGGenerationService:
             )
         )
 
+        print(
+            f"[Timing] Retrieval       : "
+            f"{time.perf_counter() - start:.3f}s"
+        )
+
+        start = time.perf_counter()
+
         context = (
             self._context_builder.build(
                 results,
             )
+        )
+
+        print(
+            f"[Timing] Context Builder : "
+            f"{time.perf_counter() - start:.3f}s"
         )
 
         prompt_request = RAGPromptRequest(
@@ -60,11 +79,20 @@ class RAGGenerationService:
             context=context,
         )
 
+        start = time.perf_counter()
+
         llm_request = (
             self._prompt_builder.build(
                 prompt_request,
             )
         )
+
+        print(
+            f"[Timing] Prompt Builder  : "
+            f"{time.perf_counter() - start:.3f}s"
+        )
+
+        start = time.perf_counter()
 
         llm_response = (
             self._llm_client.generate_text(
@@ -72,11 +100,21 @@ class RAGGenerationService:
             )
         )
 
+        print(
+            f"[Timing] LLM Generation  : "
+            f"{time.perf_counter() - start:.3f}s"
+        )
+
         sources = sorted(
             {
                 result.file_name
                 for result in results
             }
+        )
+
+        print(
+            f"[Timing] Total Pipeline  : "
+            f"{time.perf_counter() - overall_start:.3f}s"
         )
 
         return RAGResponse(
