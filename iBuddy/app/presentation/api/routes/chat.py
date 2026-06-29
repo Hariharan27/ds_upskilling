@@ -33,6 +33,7 @@ def chat(
 
     rag_request = RAGRequest(
         query=request.query,
+        conversation_history=request.conversation_history,
     )
 
     response = rag_service.generate(

@@ -1,10 +1,15 @@
 import time
 
+from jinja2.nodes import Literal
 from together import Together
 from together.types.chat import completion_create_params
-from together.types.chat.completion_create_params import MessageChatCompletionSystemMessageParam, \
-    MessageChatCompletionUserMessageParam
+from together.types.chat.completion_create_params import (
+    MessageChatCompletionSystemMessageParam,
+    MessageChatCompletionUserMessageParam,
+    MessageChatCompletionAssistantMessageParam,
+)
 
+from app.domain.models.chat_message import MessageRole
 from app.domain.models.llm_request import (
     LLMRequest,
 )
@@ -17,7 +22,6 @@ from app.domain.services.llm_client import (
 from app.shared.config import (
     get_settings,
 )
-from app.shared.constants.constants import SYSTEM_ROLE, USER_ROLE
 from app.shared.exceptions.llm import (
     LLMClientError,
     LLMResponseError,
@@ -120,15 +124,35 @@ class TogetherLLMClient(
             request: LLMRequest,
     ) -> list[completion_create_params.Message]:
 
-        messages: list[completion_create_params.Message] = [
-            MessageChatCompletionSystemMessageParam(
-                content=request.system_prompt,
-                role=SYSTEM_ROLE,
-            ),
-            MessageChatCompletionUserMessageParam(
-                content=request.user_prompt,
-                role=USER_ROLE,
-            ),
-        ]
+        messages: list[completion_create_params.Message] = []
+
+        for message in request.messages:
+
+            if message.role == MessageRole.SYSTEM.value:
+
+                messages.append(
+                    MessageChatCompletionSystemMessageParam(
+                        role= MessageRole.SYSTEM.value,
+                        content=message.content,
+                    )
+                )
+
+            elif message.role == MessageRole.USER.value:
+
+                messages.append(
+                    MessageChatCompletionUserMessageParam(
+                        role= MessageRole.USER.value,
+                        content=message.content,
+                    )
+                )
+
+            elif message.role == MessageRole.ASSISTANT.value:
+
+                messages.append(
+                    MessageChatCompletionAssistantMessageParam(
+                        role=MessageRole.ASSISTANT.value,
+                        content=message.content,
+                    )
+                )
 
         return messages

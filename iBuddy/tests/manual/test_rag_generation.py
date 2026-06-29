@@ -5,8 +5,10 @@ from app.application.services.query_expansion.llm_query_expansion_service import
     LlmQueryExpansionService,
 )
 from app.application.services.rag.models import (
-    RAGPromptRequest, RAGRequest,
+    RAGRequest,
 )
+from app.domain.models.chat_message import ChatMessage, MessageRole
+
 from app.application.services.rag.prompt_builder import (
     PromptBuilder,
 )
@@ -88,7 +90,17 @@ def main() -> None:
     )
 
     request = RAGRequest(
-        query="How many days a new father get a leave?",
+        query="Can I carry them forward?",
+        conversation_history=[
+            ChatMessage(
+                role=MessageRole.USER,
+                content="How many WFH days are allowed?",
+            ),
+            ChatMessage(
+                role= MessageRole.ASSISTANT,
+                content="Employees are allowed two WFH days per week.",
+            ),
+        ],
     )
 
     response = rag_service.generate(

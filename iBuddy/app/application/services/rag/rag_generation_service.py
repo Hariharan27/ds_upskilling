@@ -77,6 +77,7 @@ class RAGGenerationService:
         prompt_request = RAGPromptRequest(
             query=request.query,
             context=context,
+            conversation_history=request.conversation_history,
         )
 
         start = time.perf_counter()

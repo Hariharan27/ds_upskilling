@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
+from app.domain.models.chat_message import ChatMessage
+
+
 @dataclass(frozen=True)
 class LLMRequest:
-    system_prompt: str
-    user_prompt: str
+    messages: list[ChatMessage]
     temperature: float = 0.0
     max_tokens: int = 512
