@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     )
     reranker_model: str = "BAAI/bge-reranker-base"
 
+    cors_origins: list[str] = [
+        "http://localhost:5173",
+    ]
+
 
 @lru_cache
 def get_settings() -> Settings:

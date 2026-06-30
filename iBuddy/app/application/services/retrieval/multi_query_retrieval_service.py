@@ -1,6 +1,7 @@
+from app.application.services.conversational_query_expansion.models import ConversationalQueryExpansionRequest
 from app.domain.entities.retrieval_request import RetrievalRequest
 from app.domain.entities.search_result import SearchResult
-from app.domain.services.query_expansion_service import  QueryExpansionService
+from app.domain.services.conversational_query_expansion_service import  ConversationalQueryExpansionService
 from app.application.services.retrieval.retrieval_service import RetrievalService
 from app.domain.services.reranking_service import RerankingService
 
@@ -9,7 +10,7 @@ class MultiQueryRetrievalService:
 
     def __init__(
             self,
-            query_expand_service:QueryExpansionService,
+            query_expand_service:ConversationalQueryExpansionService,
             retrival_service:RetrievalService,
             reranking_service: RerankingService,
     )->None:
@@ -68,9 +69,17 @@ class MultiQueryRetrievalService:
             request: RetrievalRequest,
     ) -> list[SearchResult]:
 
+        expansion_request = (
+            ConversationalQueryExpansionRequest(
+                query=request.query,
+                conversation_history=request.conversation_history,
+            )
+        )
+
         queries = (
-            self.query_expand_service
-            .expand(request.query)
+            self.query_expand_service.expand(
+                expansion_request,
+            )
         )
 
         print(queries)

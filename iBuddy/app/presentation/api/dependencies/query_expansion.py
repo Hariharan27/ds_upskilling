@@ -1,10 +1,10 @@
 from functools import lru_cache
 
-from app.application.services.query_expansion.llm_query_expansion_service import (
-    LlmQueryExpansionService,
+from app.application.services.conversational_query_expansion.llm_conversational_query_expansion_service import (
+    LlmConversationalQueryExpansionService,
 )
-from app.domain.services.query_expansion_service import (
-    QueryExpansionService,
+from app.domain.services.conversational_query_expansion_service import (
+    ConversationalQueryExpansionService,
 )
 from app.presentation.api.dependencies.llm import (
     get_client,
@@ -12,11 +12,11 @@ from app.presentation.api.dependencies.llm import (
 
 
 @lru_cache
-def get_query_expansion_service() -> QueryExpansionService:
+def get_query_expansion_service() -> ConversationalQueryExpansionService:
     """
     Return a singleton query expansion service.
     """
 
-    return LlmQueryExpansionService(
+    return LlmConversationalQueryExpansionService(
         llm_client=get_client(),
     )

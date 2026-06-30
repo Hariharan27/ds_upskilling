@@ -46,6 +46,7 @@ class RAGGenerationService:
 
         retrieval_request = RetrievalRequest(
             query=request.query,
+            conversation_history=request.conversation_history,
         )
 
         start = time.perf_counter()

@@ -1,8 +1,8 @@
 from app.application.services.context_builder.default_context_builder import (
     DefaultContextBuilder,
 )
-from app.application.services.query_expansion.llm_query_expansion_service import (
-    LlmQueryExpansionService,
+from app.application.services.conversational_query_expansion.llm_conversational_query_expansion_service import (
+    LlmConversationalQueryExpansionService,
 )
 from app.application.services.rag.models import (
     RAGRequest,
@@ -55,7 +55,7 @@ def main() -> None:
     llm_client = TogetherLLMClient()
 
     query_expansion_service = (
-        LlmQueryExpansionService(
+        LlmConversationalQueryExpansionService(
             llm_client=llm_client,
         )
     )

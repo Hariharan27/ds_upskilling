@@ -1,4 +1,4 @@
-from app.application.services.query_expansion.llm_query_expansion_service import LlmQueryExpansionService
+from app.application.services.conversational_query_expansion.llm_conversational_query_expansion_service import LlmConversationalQueryExpansionService
 from app.application.services.retrieval.retrieval_service import RetrievalService
 from app.application.services.retrieval.multi_query_retrieval_service import MultiQueryRetrievalService
 from app.domain.entities.retrieval_request import RetrievalRequest
@@ -25,7 +25,7 @@ def main() -> None:
 
     reranking_service = BGERerankingService()
 
-    query_expansion_service = LlmQueryExpansionService(llm_client)
+    query_expansion_service = LlmConversationalQueryExpansionService(llm_client)
 
     multi_query_retrieval_service = (
         MultiQueryRetrievalService(query_expansion_service,retrieval_service,reranking_service)
