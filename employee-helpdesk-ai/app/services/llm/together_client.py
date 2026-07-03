@@ -1,6 +1,8 @@
 import time
 
 from together import Together
+from together.types.chat import completion_create_params
+
 from app.core.config import settings
 from app.schemas.response import UsageResponse
 from app.services.llm.models import (
@@ -8,24 +10,20 @@ from app.services.llm.models import (
 )
 from  app.services.llm.exceptions import (
 LLMServiceError,
-LLMResponseError
+LLMResponseError,
 )
-from together.types.chat import completion_create_params
-
 from app.core.logging_config import logger
 
 
-
 class TogetherClient:
-
     def __init__(self):
         self.client = Together(
             api_key=settings.TOGETHER_API_KEY
         )
 
     def generate(
-            self,
-            messages: list[completion_create_params.Message]
+        self,
+        messages: list[completion_create_params.Message],
     ) -> LLMResponse:
 
         response = None
@@ -48,7 +46,7 @@ class TogetherClient:
                     model=settings.MODEL_NAME,
                     messages=messages,
                     temperature=settings.TEMPERATURE,
-                    max_tokens=settings.MAX_TOKENS
+                    max_tokens=settings.MAX_TOKENS,
                 )
 
                 usage = response.usage
@@ -94,9 +92,9 @@ class TogetherClient:
         return LLMResponse(
             content=content,
             model=settings.MODEL_NAME,
-            usage= UsageResponse(
-                input_tokens= prompt_tokens,
-                output_tokens= completion_tokens,
-                total_tokens= total_tokens
-            )
+            usage=UsageResponse(
+                input_tokens=prompt_tokens,
+                output_tokens=completion_tokens,
+                total_tokens=total_tokens,
+            ),
         )

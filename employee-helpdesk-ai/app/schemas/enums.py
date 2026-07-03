@@ -9,7 +9,6 @@ class DepartmentEnum(str, Enum):
 
 
 class CategoryEnum(str, Enum):
-
     LEAVE_REQUEST = "LEAVE_REQUEST"
     PAYROLL = "PAYROLL"
     BENEFITS = "BENEFITS"
@@ -21,8 +20,9 @@ class CategoryEnum(str, Enum):
     ACCESS_CARD = "ACCESS_CARD"
     MEETING_ROOM = "MEETING_ROOM"
     OFFICE_MAINTENANCE = "OFFICE_MAINTENANCE"
-    
+
     OTHER = "OTHER"
+
 
 class PriorityEnum(str, Enum):
     LOW = "LOW"
