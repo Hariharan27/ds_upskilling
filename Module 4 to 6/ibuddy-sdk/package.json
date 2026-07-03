@@ -1,0 +1,32 @@
+{
+  "name": "ibuddy",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "build:core": "npm run build --workspace @ibuddy/core",
+    "build:web": "npm run build --workspace @ibuddy/react-web",
+    "build:web-example": "npm run build --workspace react-web-example",
+    "clean": "npm run clean --workspaces --if-present",
+    "test": "vitest run",
+    "test:web-flow": "vitest run packages/react-web/src/**/*.test.tsx",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck:web": "npm run typecheck --workspace @ibuddy/react-web",
+    "typecheck:web-example": "npm run typecheck --workspace react-web-example"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.0",
+    "@types/react-dom": "^19.1.6",
+    "jsdom": "^26.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.9.2",
+    "vitest": "^2.1.8"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-arm64-gnu": "^4.62.2"
+  }
+}
