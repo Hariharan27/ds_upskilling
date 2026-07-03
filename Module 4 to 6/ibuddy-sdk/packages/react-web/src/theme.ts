@@ -154,11 +154,17 @@ export const widgetStyles = `
   min-height: 0;
   overflow-y: auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
   background:
     radial-gradient(circle at top right, rgba(8, 145, 178, 0.08), transparent 30%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
     var(--ibuddy-bg);
   scroll-behavior: smooth;
+}
+
+.ibuddy-widget-body-spacer {
+  flex: 1;
 }
 
 .ibuddy-widget-empty {
@@ -369,13 +375,19 @@ export const widgetStyles = `
 
 .ibuddy-widget-input-shell {
   display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  padding: 12px;
-  border: 1px solid var(--ibuddy-border);
-  border-radius: 20px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px 10px 14px;
+  border: 1.5px solid var(--ibuddy-border);
+  border-radius: 22px;
   background: var(--ibuddy-input);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.ibuddy-widget-input-shell:focus-within {
+  border-color: var(--ibuddy-brand);
+  box-shadow: 0 0 0 3px var(--ibuddy-brand-soft), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .ibuddy-widget-input {
@@ -387,6 +399,7 @@ export const widgetStyles = `
   outline: none;
   background: transparent;
   color: var(--ibuddy-text);
+  font-size: 14px;
   line-height: 1.55;
 }
 
@@ -398,23 +411,25 @@ export const widgetStyles = `
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
   border: 0;
-  border-radius: 16px;
+  border-radius: 14px;
   background: linear-gradient(135deg, var(--ibuddy-brand) 0%, var(--ibuddy-accent) 100%);
   color: white;
   cursor: pointer;
-  box-shadow: 0 16px 32px rgba(8, 145, 178, 0.24);
+  box-shadow: 0 8px 20px rgba(8, 145, 178, 0.3);
   transition: transform 160ms ease, opacity 160ms ease, box-shadow 160ms ease;
 }
 
 .ibuddy-widget-send:hover:not(:disabled) {
   transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(8, 145, 178, 0.35);
 }
 
 .ibuddy-widget-send:disabled {
-  opacity: 0.55;
+  opacity: 0.45;
   cursor: not-allowed;
   box-shadow: none;
 }

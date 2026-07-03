@@ -136,6 +136,8 @@ export const ChatWindow: FC<{
       </header>
 
       <div className="ibuddy-widget-body" ref={bodyRef}>
+        <div className="ibuddy-widget-body-spacer" />
+
         {messages.length === 0 && !isLoading ? (
           <div className="ibuddy-widget-empty">
             <h3 className="ibuddy-widget-empty-title">Ask iBuddy anything</h3>
@@ -174,19 +176,19 @@ export const ChatWindow: FC<{
               disabled={isLoading || draft.trim().length === 0}
               type="submit"
             >
-              <svg fill="none" height="18" viewBox="0 0 24 24" width="18">
+              <svg fill="none" height="16" viewBox="0 0 24 24" width="16">
                 <path
-                  d="M10.5 13.5 21 3m-10.5 10.5-3 7.5c-.27.68-.4 1.02-.59 1.11-.16.08-.35.08-.51 0-.19-.09-.32-.43-.58-1.1L2.25 12c-.21-.53-.32-.79-.27-.99.05-.18.18-.34.35-.43.19-.09.47-.02 1.04.11l8.13 2.81Zm0 0L7.69 10.7"
+                  d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
                   stroke="currentColor"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth="1.8"
+                  strokeWidth="2"
                 />
               </svg>
             </button>
           </div>
         </form>
-        <p className="ibuddy-widget-footer-note">{isLoading ? "Generating response..." : subtitle}</p>
+        {isLoading ? <p className="ibuddy-widget-footer-note">Generating response...</p> : null}
       </footer>
     </section>
   );

@@ -115,7 +115,7 @@ export const App: FC = () => {
         onError={(error) => setLastEvent(`Error: ${error.message}`)}
         onMessageReceived={(result) => setLastEvent(`Assistant replied with ${result.answer}`)}
         onMessageSent={(query) => setLastEvent(`Sent: ${query}`)}
-        placeholder="Ask iBuddy about company policies..."
+        placeholder="Ask about company policies..."
         subtitle="Helping Every Ideator Find Answers Faster"
         theme={theme}
         title="IBuddy"
