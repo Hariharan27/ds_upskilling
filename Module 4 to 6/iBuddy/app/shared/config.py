@@ -40,6 +40,10 @@ class Settings(BaseSettings):
         "http://localhost:5173",
     ]
 
+    HRMS_base_url: str
+
+    HRMS_auth_token: str
+
 
 @lru_cache
 def get_settings() -> Settings:

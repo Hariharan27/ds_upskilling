@@ -1,18 +1,16 @@
 from fastapi import APIRouter
 from fastapi import Depends
 
-from app.application.services.rag.models import (
-    RAGRequest,
-)
-from app.presentation.api.dependencies.rag import (
-    get_rag_generation_service,
+
+from app.presentation.api.dependencies.chat import (
+    get_chat_generation_service,
 )
 from app.presentation.api.models.chat import (
     ChatRequest,
     ChatResponse,
 )
-from app.application.services.rag.rag_generation_service import (
-    RAGGenerationService,
+from app.application.services.chat.chat_generation_service import (
+    ChatGenerationService,
 )
 
 router = APIRouter(
@@ -26,18 +24,13 @@ router = APIRouter(
 )
 def chat(
     request: ChatRequest,
-    rag_service: RAGGenerationService = Depends(
-        get_rag_generation_service,
+    chat_service: ChatGenerationService = Depends(
+        get_chat_generation_service,
     ),
 ) -> ChatResponse:
 
-    rag_request = RAGRequest(
-        query=request.query,
-        conversation_history=request.conversation_history,
-    )
-
-    response = rag_service.generate(
-        rag_request,
+    response = chat_service.generate_chat(
+        request=request,
     )
 
     return ChatResponse(

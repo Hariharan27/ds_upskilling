@@ -4,23 +4,17 @@ from pydantic import Field
 from app.domain.models.chat_message import ChatMessage
 
 
-class RAGPromptRequest(BaseModel):
+class ChatRequest(BaseModel):
     query: str
-    context: str
     conversation_history: list[ChatMessage] = Field(
         default_factory=list,
     )
 
-class RAGResponse(BaseModel):
+
+class ChatResponse(BaseModel):
     answer: str
     sources: list[str]
+
     input_tokens: int
     output_tokens: int
     total_tokens: int
-
-
-class RAGRequest(BaseModel):
-    query: str
-    conversation_history: list[ChatMessage] = Field(
-        default_factory=list,
-    )
