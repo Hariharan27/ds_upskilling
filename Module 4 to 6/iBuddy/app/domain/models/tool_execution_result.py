@@ -3,10 +3,13 @@ from pydantic import Field
 
 
 class ToolExecutionResult(BaseModel):
+
     success: bool
 
-    data: dict = Field(
-        default_factory=dict,
-    )
+    context: str | None = None
 
+    sources: list[str] | None = None
+
+    data: dict = Field(default_factory=dict,
+    )
     error_message: str | None = None

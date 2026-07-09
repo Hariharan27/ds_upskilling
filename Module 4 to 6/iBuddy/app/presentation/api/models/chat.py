@@ -14,7 +14,7 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     answer: str
-    sources: list[str]
+    sources: list[str] | None = None
     input_tokens: int
     output_tokens: int
     total_tokens: int

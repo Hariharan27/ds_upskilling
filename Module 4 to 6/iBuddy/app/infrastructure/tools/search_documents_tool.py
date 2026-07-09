@@ -1,9 +1,5 @@
-from app.application.services.rag.models import (
-    RAGRequest,
-)
-from app.application.services.rag.rag_generation_service import (
-    RAGGenerationService,
-)
+from app.application.services.retrieval.multi_query_retrieval_service import MultiQueryRetrievalService
+from app.domain.entities.retrieval_request import RetrievalRequest
 from app.domain.models.tool_definition import (
     ToolDefinition,
 )
@@ -13,6 +9,7 @@ from app.domain.models.tool_execution_request import (
 from app.domain.models.tool_execution_result import (
     ToolExecutionResult,
 )
+from app.domain.services.context_builder import ContextBuilder
 from app.domain.tools.base_tool import (
     BaseTool,
 )
@@ -22,10 +19,12 @@ class SearchDocumentsTool(BaseTool):
 
     def __init__(
         self,
-        rag_generation_service: RAGGenerationService,
+        retrieval_service: MultiQueryRetrievalService,
+        context_builder: ContextBuilder,
     ) -> None:
 
-        self._rag_generation_service = rag_generation_service
+        self._retrieval_service = retrieval_service
+        self._context_builder = context_builder
 
     @property
     def definition(
@@ -49,26 +48,34 @@ class SearchDocumentsTool(BaseTool):
 )
 
     def execute(
-        self,
-        request: ToolExecutionRequest,
+            self,
+            request: ToolExecutionRequest,
     ) -> ToolExecutionResult:
-
-        rag_request = RAGRequest(
+        retrieval_request = RetrievalRequest(
             query=request.query,
             conversation_history=request.conversation_history,
         )
 
-        rag_response = self._rag_generation_service.generate(
-            rag_request,
+        results = self._retrieval_service.retrieve(
+            retrieval_request,
+        )
+
+        context = self._context_builder.build(
+            results,
+        )
+
+        sources = sorted(
+            {
+                result.file_name
+                for result in results
+            }
         )
 
         return ToolExecutionResult(
             success=True,
+            context=context,
+            sources=sources,
             data={
-                "answer": rag_response.answer,
-                "sources": rag_response.sources,
-                "input_tokens": rag_response.input_tokens,
-                "output_tokens": rag_response.output_tokens,
-                "total_tokens": rag_response.total_tokens,
+                "results": results,
             },
         )

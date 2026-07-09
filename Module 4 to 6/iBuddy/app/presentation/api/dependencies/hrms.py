@@ -9,6 +9,7 @@ from app.domain.services.hrms_rest_client import (
 from app.infrastructure.rest.hrms_rest_client import (
     HRMSRestClientImpl,
 )
+from app.infrastructure.rest.mappers.apply_leave_request_mapper import ApplyLeaveRequestMapper
 from app.infrastructure.rest.mappers.leave_details_request_mapper import (
     LeaveDetailsRequestMapper,
 )
@@ -36,3 +37,6 @@ def get_leave_details_request_mapper(
     return LeaveDetailsRequestMapper(
         date_provider=date_provider,
     )
+
+def get_apply_leave_request_mapper() -> ApplyLeaveRequestMapper:
+    return ApplyLeaveRequestMapper()

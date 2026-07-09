@@ -5,7 +5,7 @@ from together.types.chat import completion_create_params
 from together.types.chat.completion_create_params import (
     MessageChatCompletionSystemMessageParam,
     MessageChatCompletionUserMessageParam,
-    MessageChatCompletionAssistantMessageParam,
+    MessageChatCompletionAssistantMessageParam, ResponseFormatJsonSchema, ResponseFormatJsonSchemaJsonSchema,
 )
 
 from app.domain.models.chat_message import MessageRole
@@ -60,17 +60,39 @@ class TogetherLLMClient(
         ):
 
             try:
-
-                response = (
-                    self._client.chat.completions.create(
+                if request.response_schema:
+                    response = self._client.chat.completions.create(
                         model=self._settings.together_model,
                         messages=self._build_messages(
                             request,
                         ),
                         temperature=request.temperature,
                         max_tokens=request.max_tokens,
+                        response_format=ResponseFormatJsonSchema(
+                            type="json_schema",
+                            json_schema=ResponseFormatJsonSchemaJsonSchema(
+                                name=request.response_schema.__name__,
+                                description=(
+                                    "Structured output for "
+                                    f"{request.response_schema.__name__}."
+                                ),
+                                schema=request.response_schema.model_json_schema(),
+                                strict=True,
+                            ),
+                        ),
                     )
-                )
+                else :
+                    response = (
+                        self._client.chat.completions.create(
+                            model=self._settings.together_model,
+                            messages=self._build_messages(
+                                request,
+                            ),
+                            temperature=request.temperature,
+                            max_tokens=request.max_tokens,
+                        )
+                    )
+
 
                 break
 

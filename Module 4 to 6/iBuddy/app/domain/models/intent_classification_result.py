@@ -2,6 +2,6 @@ from pydantic import BaseModel
 
 
 class IntentClassificationResult(BaseModel):
-    tool_name: str
+    tool_name: str | None
     confidence: float
     reason: str
