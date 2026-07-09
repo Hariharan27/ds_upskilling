@@ -48,7 +48,7 @@ def main() -> None:
     )
 
     orchestrator.index_directory(
-        "/Users/ideas2it/Documents/Data Science &Gen AI/GenAIDataSciencePractice/iBuddy/data/incoming"
+        "/Users/ideas2it/Documents/Data Science &Gen AI/GenAIDataSciencePractice/Module 4 to 6/iBuddy/data/incoming"
     )
 
 
