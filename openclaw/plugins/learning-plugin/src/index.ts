@@ -1,5 +1,8 @@
 import { Type } from "typebox";
 import { defineToolPlugin } from "openclaw/plugin-sdk/tool-plugin";
+import { LeaveService } from "./services/leave.service.js";
+
+const leaveService = new LeaveService();
 
 export default defineToolPlugin({
   id: "learning-plugin",
@@ -12,12 +15,11 @@ export default defineToolPlugin({
       parameters: Type.Object({
         input: Type.String({ description: "Text to echo." }),
       }),
-      execute: async ({ input }) => ({
-  message: "🚀 Hello from my Learning Plugin!",
-  receivedInput: input,
-  plugin: "learning-plugin",
-  version: "0.1.0",
-}),
+      execute: async ({ input }) => {
+        console.log("Echo Tool Invoked:", input);
+
+        return await leaveService.getLeaveBalance();
+      },
     }),
   ],
 });
