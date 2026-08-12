@@ -1,0 +1,26 @@
+{
+  "id": "repo-search",
+  "name": "Repo Search",
+  "description": "Search repository files and return matching evidence.",
+  "version": "0.1.0",
+  "configSchema": {
+    "type": "object",
+    "required": [
+      "repositoryPath"
+    ],
+    "properties": {
+      "repositoryPath": {
+        "type": "string",
+        "description": "Absolute path to the repository that RepoGuide is allowed to search."
+      }
+    }
+  },
+  "activation": {
+    "onStartup": true
+  },
+  "contracts": {
+    "tools": [
+      "repo_search"
+    ]
+  }
+}

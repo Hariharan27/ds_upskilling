@@ -1,0 +1,17 @@
+{
+  "id": "repo-scope-gate",
+  "name": "Repo Scope Gate",
+  "description": "Enforces repository scope before agent execution.",
+  "version": "0.1.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "activation": {
+    "onStartup": true
+  },
+  "hooks": {
+    "allowConversationAccess": true
+  }
+}
