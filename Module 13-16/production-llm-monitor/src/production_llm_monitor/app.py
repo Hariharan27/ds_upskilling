@@ -1,6 +1,7 @@
 import time
 from langfuse import get_client, observe
 from dotenv import load_dotenv
+
 from production_llm_monitor.llm import LLMClient
 from production_llm_monitor.observability import (
     configure_logging,
@@ -15,6 +16,11 @@ from production_llm_monitor.observability import (
     log_event,
 )
 from production_llm_monitor.evaluation import BasicEvaluator, Evaluator
+from production_llm_monitor.guardrails import (
+    GuardrailViolation,
+    InputGuardrail,
+    OutputGuardrail,
+)
 
 load_dotenv()
 
@@ -25,6 +31,8 @@ class LLMApplication:
         configure_logging()
         self.llm = LLMClient()
         self.evaluator = evaluator or BasicEvaluator()
+        self.input_guardrail = InputGuardrail()
+        self.output_guardrail = OutputGuardrail()
 
     @observe()
     def ask(self,
@@ -33,6 +41,17 @@ class LLMApplication:
             session_id: str | None = None,
             ) -> str:
         """Send a prompt to the LLM and monitor the request."""
+
+        try:
+            self.input_guardrail.validate(prompt)
+        except GuardrailViolation as exc:
+            log_event(
+                "guardrail_blocked",
+                reason=str(exc),
+                user_id=user_id,
+                session_id=session_id,
+            )
+            raise
 
         correlation_id = create_correlation_id()
 
@@ -59,6 +78,17 @@ class LLMApplication:
             result = self.llm.generate(prompt)
 
             response = result["content"]
+
+            try:
+                self.output_guardrail.validate(response)
+            except GuardrailViolation as exc:
+                log_event(
+                    "guardrail_blocked",
+                    reason=str(exc),
+                    user_id=user_id,
+                    session_id=session_id,
+                )
+                raise
 
             langfuse.update_current_span(
                 metadata={
