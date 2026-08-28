@@ -103,13 +103,36 @@ class LLMApplication:
                     cache_hit=result["cache_hit"],
             )
 
-            evaluation = self.evaluator.evaluate(prompt, response)
+            try:
+                evaluation = self.evaluator.evaluate(prompt, response)
 
-            langfuse.score_current_trace(
+                langfuse.score_current_trace(
                     name="response_quality",
                     value=evaluation["score"],
                     data_type="NUMERIC",
                     comment=evaluation["label"],
+                )
+
+                log_event(
+                    "llm_evaluation_completed",
+                    correlation_id=correlation_id,
+                    model=self.llm.model,
+                    score=evaluation["score"],
+                    label=evaluation["label"],
+                )
+
+            except Exception as exc:
+                log_error(
+                    exc,
+                    correlation_id=correlation_id,
+                    model=self.llm.model,
+                )
+
+                log_event(
+                    "llm_evaluation_failed",
+                    correlation_id=correlation_id,
+                    model=self.llm.model,
+                    error_type=type(exc).__name__,
                 )
 
             cost = calculate_cost(
