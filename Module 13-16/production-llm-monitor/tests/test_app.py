@@ -83,3 +83,22 @@ def test_application_returns_response_when_evaluation_fails():
     response = app.ask("What is RAG?")
 
     assert response == "Fake response for: What is RAG?"
+
+class FakeJudgeEvaluator:
+    def evaluate(self, prompt: str, response: str) -> dict:
+        return {
+            "score": 0.9,
+            "label": "good",
+            "reason": "Relevant response",
+        }
+
+def test_application_runs_llm_and_evaluation_together():
+    app = LLMApplication.__new__(LLMApplication)
+    app.llm = FakeLLMClient()
+    app.evaluator = FakeJudgeEvaluator()
+    app.input_guardrail = InputGuardrail()
+    app.output_guardrail = OutputGuardrail()
+
+    response = app.ask("What is RAG?")
+
+    assert response == "Fake response for: What is RAG?"
