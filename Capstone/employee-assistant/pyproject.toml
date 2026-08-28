@@ -17,6 +17,7 @@ dependencies = [
     "qdrant-client>=1.19.0",
     "langchain-qdrant>=1.1.0",
     "flashrank>=0.2.10",
+    "langchain-together>=0.4.0",
 ]
 
 
