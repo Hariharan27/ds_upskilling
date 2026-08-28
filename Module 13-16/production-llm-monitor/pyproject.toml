@@ -1,0 +1,30 @@
+[project]
+name = "production-llm-monitor"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Hariharan S", email = "hariharan@ideas2it.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "langfuse>=4.15.1",
+    "python-dotenv>=1.2.3",
+    "redis>=8.1.0",
+    "together>=2.32.0",
+]
+
+[project.scripts]
+production-llm-monitor = "production_llm_monitor:main"
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
