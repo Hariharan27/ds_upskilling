@@ -68,3 +68,18 @@ def test_application_blocks_empty_llm_response():
 
     with pytest.raises(GuardrailViolation):
         app.ask("What is RAG?")
+
+class FailingEvaluator:
+    def evaluate(self, prompt: str, response: str) -> dict:
+        raise RuntimeError("Evaluation service unavailable")
+
+def test_application_returns_response_when_evaluation_fails():
+    app = LLMApplication.__new__(LLMApplication)
+    app.llm = FakeLLMClient()
+    app.evaluator = FailingEvaluator()
+    app.input_guardrail = InputGuardrail()
+    app.output_guardrail = OutputGuardrail()
+
+    response = app.ask("What is RAG?")
+
+    assert response == "Fake response for: What is RAG?"
