@@ -1,11 +1,15 @@
-from pydantic import BaseModel,Field
+from pydantic import BaseModel, Field
+
+from app.schemas.rag import RAGSource
+
 
 class ChatRequest(BaseModel):
-    message:str = Field(
+    message: str = Field(
         min_length=1,
-        description="message sent by the employee."
+        max_length=2000,
     )
 
 
 class ChatResponse(BaseModel):
-    message:str
+    answer: str
+    sources: list[RAGSource] = Field(default_factory=list)

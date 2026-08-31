@@ -1,23 +1,16 @@
-from app.ai.models.together import TogetherLLM
+from app.ai.graphs.employee_assistant import employee_assistant_graph
+from app.schemas.chat import ChatResponse
+
 
 class ChatService:
-    def __init__(self) -> None:
-        self.llm = TogetherLLM()
-
-    def chat(self, message:str) -> str:
-        response = self.llm.generate(
-            [
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a helpful employee assistant. "
-                        "Answer clearly and concisely."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": message,
-                },
-            ]
+    def chat(self, message: str) -> ChatResponse:
+        result = employee_assistant_graph.invoke(
+            {
+                "message": message,
+            }
         )
-        return response
+
+        return ChatResponse(
+            answer=result.get("response", ""),
+            sources=result.get("sources", []),
+        )

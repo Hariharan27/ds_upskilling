@@ -1,25 +1,29 @@
 from langchain_core.documents import Document
 
 from app.ai.rag.vector_store import get_qdrant_vector_store
-from app.ai.rag.reranking import rerank_documents
+
+
+DEFAULT_TOP_K = 3
+RELEVANCE_THRESHOLD = 0.60
 
 
 def retrieve_documents(
     query: str,
-    k: int = 10,
-    top_n: int = 3,
+    k: int = DEFAULT_TOP_K,
 ) -> list[Document]:
-    """Retrieve candidates from Qdrant and rerank them."""
+    """Retrieve relevant policy chunks from Qdrant."""
 
     vector_store = get_qdrant_vector_store()
 
-    candidates = vector_store.similarity_search(
+    results = vector_store.similarity_search_with_score(
         query,
         k=k,
     )
 
-    return rerank_documents(
-        query=query,
-        documents=candidates,
-        top_n=top_n,
-    )
+    relevant_documents = [
+        document
+        for document, score in results
+        if score >= RELEVANCE_THRESHOLD
+    ]
+
+    return relevant_documents
