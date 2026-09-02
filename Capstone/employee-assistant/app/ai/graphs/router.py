@@ -1,27 +1,21 @@
 from typing import Literal
+from functools import lru_cache
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_together import ChatTogether
-from pydantic import BaseModel, Field
-
+from app.core.timing import log_duration
+from app.core.langfuse import get_langfuse
 from app.core.config import get_settings
+from app.core.langfuse import get_langfuse_handler
+from app.core.cache import get_cache
+from app.ai.graphs.route_decision import RouteDecision
+from app.ai.graphs.deterministic_router import deterministic_route
+
+ROUTER_PROMPT_VERSION = "v1"
 
 
-class RouteDecision(BaseModel):
-    """Structured routing decision for the employee assistant."""
 
-    intent: Literal[
-        "policy",
-        "attendance",
-        "leave",
-        "wfh",
-        "ticket",
-        "unknown",
-    ] = Field(
-        description="The capability that should handle the employee request."
-    )
-
-
+@lru_cache(maxsize=1)
 def get_router():
     """Create the structured LLM router."""
 
@@ -88,12 +82,77 @@ For example:
 def route_message(message: str) -> RouteDecision:
     """Classify an employee message."""
 
-    router = get_router()
+    settings = get_settings()
+    cache = get_cache()
+    langfuse = get_langfuse()
 
-    chain = ROUTER_PROMPT | router
+    with langfuse.start_as_current_observation(
+        name="router",
+        as_type="chain",
+        input={"message": message},
+    ) as observation:
 
-    return chain.invoke(
-        {
-            "message": message,
-        }
-    )
+        # 1. Try deterministic routing first
+        deterministic_decision = deterministic_route(message)
+
+        if deterministic_decision:
+            observation.update(
+                output={
+                    "intent": deterministic_decision.intent,
+                    "cache": "not_used",
+                    "routing_source": "deterministic",
+                }
+            )
+
+            return deterministic_decision
+
+        # 2. Deterministic routing could not confidently classify.
+        #    Try Redis router cache.
+        cache_key = cache.make_router_key(
+            message=message,
+            model=settings.together_model,
+            prompt_version=ROUTER_PROMPT_VERSION,
+        )
+
+        cached_intent = cache.get(cache_key)
+
+        if cached_intent:
+            decision = RouteDecision(intent=cached_intent)
+
+            observation.update(
+                output={
+                    "intent": decision.intent,
+                    "cache": "hit",
+                    "routing_source": "cache",
+                }
+            )
+
+            return decision
+
+        # 3. Cache miss → call router LLM
+        router = get_router()
+        chain = ROUTER_PROMPT | router
+
+        with log_duration("router"):
+            decision = chain.invoke(
+                {"message": message},
+                config={
+                    "callbacks": [get_langfuse_handler()],
+                },
+            )
+
+        # 4. Cache the LLM routing decision
+        cache.set(
+            cache_key,
+            decision.intent,
+        )
+
+        observation.update(
+            output={
+                "intent": decision.intent,
+                "cache": "miss",
+                "routing_source": "llm",
+            }
+        )
+
+        return decision

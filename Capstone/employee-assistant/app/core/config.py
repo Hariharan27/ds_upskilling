@@ -13,6 +13,14 @@ class Settings(BaseSettings):
 
     together_api_key: str
     together_model: str
+    langfuse_secret_key: str
+    langfuse_public_key: str
+    langfuse_base_url: str
+    redis_host: str = "localhost"
+    redis_port: int = 6379
+    redis_db: int = 0
+
+    cache_ttl_seconds: int = 3600
 
     model_config = SettingsConfigDict(
         env_file=".env",

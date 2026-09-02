@@ -16,3 +16,4 @@ class EmployeeAssistantState(TypedDict, total=False):
     intent: Intent
     response: str
     sources: list[RAGSource]
+    temporal_context: str

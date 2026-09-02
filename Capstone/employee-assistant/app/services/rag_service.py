@@ -4,7 +4,10 @@ from app.ai.rag.retrieval import retrieve_documents
 from app.schemas.rag import RAGResponse, RAGSource
 
 
-def answer_policy_question(question: str) -> RAGResponse:
+def answer_policy_question(
+    question: str,
+    temporal_context: str,
+) -> RAGResponse:
     """Answer an employee question using HR policy documents."""
 
     documents = retrieve_documents(
@@ -24,8 +27,9 @@ def answer_policy_question(question: str) -> RAGResponse:
     context = build_context(documents)
 
     answer = generate_answer(
-        question=question,
-        context=context,
+    question=question,
+    context=context,
+    temporal_context=temporal_context,
     )
 
     source_map: dict[tuple[str, int | None], RAGSource] = {}

@@ -3,6 +3,13 @@ from langgraph.graph import END, START, StateGraph
 from app.ai.graphs.router import route_message
 from app.ai.graphs.state import EmployeeAssistantState
 from app.services.rag_service import answer_policy_question
+from app.core.time import get_temporal_context
+
+
+def initialize_context(state: EmployeeAssistantState):
+    return {
+        "temporal_context": get_temporal_context(),
+    }
 
 def router_node(
     state: EmployeeAssistantState,
@@ -29,7 +36,10 @@ def policy_node(
 ) -> dict:
     """Answer a policy question using the existing RAG pipeline."""
 
-    response = answer_policy_question(state["message"])
+    response = answer_policy_question(
+        question=state["message"],
+        temporal_context=state["temporal_context"],
+    )
 
     return {
         "response": response.answer,
@@ -40,10 +50,13 @@ def policy_node(
 def build_employee_assistant_graph():
     graph = StateGraph(EmployeeAssistantState)
 
+
+    graph.add_node("initialize_context", initialize_context)
     graph.add_node("router", router_node)
     graph.add_node("policy", policy_node)
 
-    graph.add_edge(START, "router")
+    graph.add_edge(START, "initialize_context")
+    graph.add_edge("initialize_context", "router")
 
     graph.add_conditional_edges(
         "router",
