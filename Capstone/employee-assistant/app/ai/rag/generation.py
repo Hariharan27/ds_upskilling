@@ -1,4 +1,5 @@
 from langchain_core.output_parsers import StrOutputParser
+from app.ai.guardrails.pii import redact_pii
 
 from app.ai.models.chat import get_chat_model
 from app.ai.prompts.rag import RAG_PROMPT
@@ -31,7 +32,7 @@ def generate_answer(
         name="generation",
         as_type="chain",
         input={
-            "question": question,
+            "question": redact_pii(question),
         },
     ) as observation:
 
@@ -40,7 +41,7 @@ def generate_answer(
         if cached_answer is not None:
             observation.update(
                 output={
-                    "answer": cached_answer,
+                    "answer": redact_pii(cached_answer),
                     "cache": "hit",
                 }
             )
@@ -70,7 +71,7 @@ def generate_answer(
 
         observation.update(
             output={
-                "answer": answer,
+                "answer": redact_pii(answer),
                 "cache": "miss",
             }
         )

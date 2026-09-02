@@ -2,6 +2,8 @@ import logging
 from time import perf_counter
 
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
 
 from app.core.config import get_settings
 from app.core.logging import configure_logging
@@ -11,7 +13,7 @@ from app.core.request_context import (
 )
 
 from app.api.routes.chat import router as chat_router
-
+from app.core.exceptions import OutputValidationError
 
 configure_logging()
 
@@ -65,3 +67,18 @@ async def request_logging_middleware(
 @app.get("/health")
 async def health_check() -> dict[str, str]:
     return {"status": "ok"}
+
+@app.exception_handler(OutputValidationError)
+async def output_validation_exception_handler(
+    request: Request,
+    exc: OutputValidationError,
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=422,
+        content={
+            "detail": (
+                "I couldn't generate a reliable answer for your request. "
+                "Please try rephrasing it."
+            )
+        },
+    )
