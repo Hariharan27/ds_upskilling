@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
@@ -9,6 +11,7 @@ from app.core.config import get_settings
 VECTOR_SIZE = 384
 
 
+@lru_cache(maxsize=1)
 def get_qdrant_client() -> QdrantClient:
     settings = get_settings()
 
