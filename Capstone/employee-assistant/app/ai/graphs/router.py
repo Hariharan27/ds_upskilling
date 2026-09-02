@@ -1,4 +1,3 @@
-from typing import Literal
 from functools import lru_cache
 
 from langchain_core.prompts import ChatPromptTemplate
@@ -10,6 +9,7 @@ from app.core.langfuse import get_langfuse_handler
 from app.core.cache import get_cache
 from app.ai.graphs.route_decision import RouteDecision
 from app.ai.graphs.deterministic_router import deterministic_route
+from app.ai.guardrails.pii import redact_pii
 
 ROUTER_PROMPT_VERSION = "v1"
 
@@ -89,7 +89,7 @@ def route_message(message: str) -> RouteDecision:
     with langfuse.start_as_current_observation(
         name="router",
         as_type="chain",
-        input={"message": message},
+        input={"message": redact_pii(message)},
     ) as observation:
 
         # 1. Try deterministic routing first

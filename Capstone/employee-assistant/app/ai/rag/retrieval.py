@@ -1,5 +1,5 @@
 from langchain_core.documents import Document
-
+from app.ai.guardrails.pii import redact_pii
 from app.ai.rag.vector_store import get_qdrant_vector_store
 from app.core.langfuse import get_langfuse
 from app.core.timing import log_duration
@@ -22,7 +22,7 @@ def retrieve_documents(
         name="retrieval",
         as_type="retriever",
         input={
-            "query": query,
+            "query": redact_pii(query),
             "top_k": k,
         },
     ) as observation:

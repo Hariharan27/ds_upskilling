@@ -37,3 +37,8 @@ dev = [
     "pytest-asyncio",
     "ruff",
 ]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: tests that call external services or real models",
+]
