@@ -78,6 +78,7 @@ def test_upsert_and_search_returns_matching_chunks(
     assert len(results) == 2
     assert results[0].chunk.chunk_id == "CHUNK-001"
     assert results[1].chunk.chunk_id == "CHUNK-002"
+    assert results[0].score > results[1].score
 
 
 def test_search_filters_by_project(
