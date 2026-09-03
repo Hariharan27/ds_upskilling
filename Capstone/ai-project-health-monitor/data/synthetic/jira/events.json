@@ -1,0 +1,32 @@
+[
+  {
+    "event_id": "EVT-JIRA-001",
+    "project_id": "PROJ-001",
+    "issue_key": "PROJ-101",
+    "status": "blocked",
+    "priority": "high",
+    "content": "Payment API integration is blocked. The external API team has not provided the required credentials.",
+    "author": "developer@example.com",
+    "occurred_at": "2026-09-01T09:30:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-002",
+    "project_id": "PROJ-001",
+    "issue_key": "PROJ-102",
+    "status": "in_progress",
+    "priority": "medium",
+    "content": "Backend development is three days behind the planned milestone.",
+    "author": "developer@example.com",
+    "occurred_at": "2026-09-02T14:00:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-003",
+    "project_id": "PROJ-002",
+    "issue_key": "PROJ-201",
+    "status": "done",
+    "priority": "low",
+    "content": "Reporting module completed successfully.",
+    "author": "developer@example.com",
+    "occurred_at": "2026-09-02T16:00:00Z"
+  }
+]
