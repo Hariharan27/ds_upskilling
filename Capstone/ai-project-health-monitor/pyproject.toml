@@ -1,0 +1,49 @@
+[project]
+name = "ai-project-health-monitor"
+version = "0.1.0"
+description = "Production-grade GenAI system for project health monitoring, risk detection, and proactive project insights."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+authors = [
+    { name = "Hariharan Sakthivel" }
+]
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4,<9",
+    "pytest-asyncio>=1.2,<2",
+    "ruff>=0.12,<1",
+    "mypy>=1.17,<2",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "B",
+    "UP",
+    "SIM",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
