@@ -1,0 +1,123 @@
+[
+  {
+    "case_id": "RISK-001",
+    "project_id": "PROJ-001",
+    "evidence_event_ids": [
+      "EVT-JIRA-001"
+    ],
+    "expected_risk_types": [
+      "blocker"
+    ],
+    "expected_severities": [
+      "high"
+    ],
+    "expected_evidence_event_ids": [
+      "EVT-JIRA-001"
+    ]
+  },
+  {
+    "case_id": "RISK-002",
+    "project_id": "PROJ-001",
+    "evidence_event_ids": [
+      "EVT-JIRA-002",
+      "EVT-EMAIL-001"
+    ],
+    "expected_risk_types": [
+      "delay"
+    ],
+    "expected_severities": [
+      "high"
+    ],
+    "expected_evidence_event_ids": [
+      "EVT-JIRA-002",
+      "EVT-EMAIL-001"
+    ]
+  },
+  {
+    "case_id": "RISK-003",
+    "project_id": "PROJ-001",
+    "evidence_event_ids": [
+      "EVT-EMAIL-002"
+    ],
+    "expected_risk_types": [
+      "scope_creep"
+    ],
+    "expected_severities": [
+      "medium"
+    ],
+    "expected_evidence_event_ids": [
+      "EVT-EMAIL-002"
+    ]
+  },
+  {
+    "case_id": "RISK-004",
+    "project_id": "PROJ-001",
+    "evidence_event_ids": [
+      "EVT-EMAIL-001"
+    ],
+    "expected_risk_types": [
+      "client_sentiment"
+    ],
+    "expected_severities": [
+      "medium"
+    ],
+    "expected_evidence_event_ids": [
+      "EVT-EMAIL-001"
+    ]
+  },
+  {
+    "case_id": "RISK-005",
+    "project_id": "PROJ-001",
+    "evidence_event_ids": [
+      "EVT-JIRA-001",
+      "EVT-EMAIL-001"
+    ],
+    "expected_risk_types": [
+      "blocker",
+      "delay"
+    ],
+    "expected_severities": [
+      "high",
+      "high"
+    ],
+    "expected_evidence_event_ids": [
+      "EVT-JIRA-001",
+      "EVT-EMAIL-001"
+    ]
+  },
+  {
+    "case_id": "RISK-006",
+    "project_id": "PROJ-002",
+    "evidence_event_ids": [
+      "EVT-JIRA-003",
+      "EVT-EMAIL-003"
+    ],
+    "expected_risk_types": [],
+    "expected_severities": [],
+    "expected_evidence_event_ids": []
+  },
+  {
+    "case_id": "RISK-007",
+    "project_id": "PROJ-002",
+    "evidence_event_ids": [
+      "EVT-JIRA-003",
+      "EVT-EMAIL-003",
+      "EVT-EMAIL-009"
+    ],
+    "expected_risk_types": [],
+    "expected_severities": [],
+    "expected_evidence_event_ids": []
+  },
+  {
+    "case_id": "RISK-008",
+    "project_id": "PROJ-001",
+    "evidence_event_ids": [
+      "EVT-JIRA-004",
+      "EVT-JIRA-006",
+      "EVT-JIRA-007"
+    ],
+    "expected_risk_types": [],
+    "expected_severities": [],
+    "expected_evidence_event_ids": []
+  }
+]

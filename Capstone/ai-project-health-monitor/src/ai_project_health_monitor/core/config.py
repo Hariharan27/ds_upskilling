@@ -13,6 +13,14 @@ class Environment(StrEnum):
     PRODUCTION = "production"
 
 
+class LLMProvider(StrEnum):
+    """Supported LLM providers."""
+
+    OLLAMA = "ollama"
+    TOGETHER = "together"
+    OPENAI = "openai"
+
+
 class Settings(BaseSettings):
     """Application configuration loaded from environment variables."""
 
@@ -20,7 +28,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
-        extra="ignore"
+        extra="ignore",
     )
 
     app_name: str = Field(
@@ -33,6 +41,21 @@ class Settings(BaseSettings):
     )
     environment: Environment = Environment.DEVELOPMENT
     debug: bool = False
+
+    llm_provider: LLMProvider = LLMProvider.OLLAMA
+    llm_model: str = Field(
+        default="qwen3:8b",
+        min_length=1,
+    )
+
+    ollama_host: str = Field(
+        default="http://localhost:11434",
+        min_length=1,
+    )
+
+    together_api_key: str | None = None
+    openai_api_key: str | None = None
+
 
 @lru_cache
 def get_settings() -> Settings:

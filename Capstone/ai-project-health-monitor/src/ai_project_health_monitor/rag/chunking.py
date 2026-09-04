@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from ai_project_health_monitor.domain.models.project_event import ProjectEvent
 from ai_project_health_monitor.rag.models.chunk import DocumentChunk
 
+
 class Chunker(ABC):
     """Contract for converting project events into retrievable chunks."""
 

@@ -1,5 +1,6 @@
 from ai_project_health_monitor.core.config import (
     Environment,
+    LLMProvider,
     Settings,
     get_settings,
 )
@@ -38,3 +39,34 @@ def test_get_settings_returns_cached_instance() -> None:
     second = get_settings()
 
     assert first is second
+
+def test_settings_default_llm_configuration() -> None:
+    settings = Settings(
+        _env_file=None,
+    )
+
+    assert settings.llm_provider == LLMProvider.OLLAMA
+    assert settings.llm_model == "qwen3:8b"
+    assert settings.ollama_host == "http://localhost:11434"
+
+def test_settings_accept_together_configuration() -> None:
+    settings = Settings(
+        llm_provider="together",
+        llm_model="openai/gpt-oss-20b",
+        together_api_key="test-key",
+    )
+
+    assert settings.llm_provider == LLMProvider.TOGETHER
+    assert settings.llm_model == "openai/gpt-oss-20b"
+    assert settings.together_api_key == "test-key"
+
+def test_settings_accept_openai_configuration() -> None:
+    settings = Settings(
+        llm_provider="openai",
+        llm_model="test-model",
+        openai_api_key="test-key",
+    )
+
+    assert settings.llm_provider == LLMProvider.OPENAI
+    assert settings.llm_model == "test-model"
+    assert settings.openai_api_key == "test-key"
