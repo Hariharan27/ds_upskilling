@@ -28,5 +28,75 @@
     "content": "Reporting module completed successfully.",
     "author": "developer@example.com",
     "occurred_at": "2026-09-02T16:00:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-004",
+    "project_id": "PROJ-001",
+    "issue_key": "PROJ-103",
+    "status": "in_progress",
+    "priority": "medium",
+    "content": "Authentication service implementation is progressing as planned with no current delivery impact.",
+    "author": "developer@example.com",
+    "occurred_at": "2026-09-01T13:00:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-005",
+    "project_id": "PROJ-001",
+    "issue_key": "PROJ-104",
+    "status": "in_progress",
+    "priority": "medium",
+    "content": "Checkout validation testing has identified several edge cases that require additional QA effort before release.",
+    "author": "qa@example.com",
+    "occurred_at": "2026-09-02T10:00:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-006",
+    "project_id": "PROJ-001",
+    "issue_key": "PROJ-105",
+    "status": "in_progress",
+    "priority": "medium",
+    "content": "Deployment pipeline configuration is being updated for the upcoming release. No deployment blocker has been reported.",
+    "author": "devops@example.com",
+    "occurred_at": "2026-09-02T15:30:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-007",
+    "project_id": "PROJ-001",
+    "issue_key": "PROJ-106",
+    "status": "in_progress",
+    "priority": "low",
+    "content": "Performance optimization work is underway for the reporting dashboard and is not currently affecting the release timeline.",
+    "author": "developer@example.com",
+    "occurred_at": "2026-09-03T08:30:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-008",
+    "project_id": "PROJ-001",
+    "issue_key": "PROJ-107",
+    "status": "open",
+    "priority": "medium",
+    "content": "Release readiness review is scheduled to verify remaining development, testing, and deployment activities.",
+    "author": "project-manager@example.com",
+    "occurred_at": "2026-09-03T11:00:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-009",
+    "project_id": "PROJ-002",
+    "issue_key": "PROJ-202",
+    "status": "in_progress",
+    "priority": "medium",
+    "content": "Reporting dashboard performance testing is underway and remains within the planned delivery timeline.",
+    "author": "developer@example.com",
+    "occurred_at": "2026-09-03T09:00:00Z"
+  },
+  {
+    "event_id": "EVT-JIRA-010",
+    "project_id": "PROJ-002",
+    "issue_key": "PROJ-203",
+    "status": "done",
+    "priority": "low",
+    "content": "User acceptance testing for the reporting workflow completed successfully.",
+    "author": "qa@example.com",
+    "occurred_at": "2026-09-03T11:30:00Z"
   }
 ]

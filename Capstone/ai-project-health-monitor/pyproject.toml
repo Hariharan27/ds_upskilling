@@ -8,6 +8,7 @@ authors = [
     { name = "Hariharan Sakthivel" }
 ]
 dependencies = [
+    "ollama>=0.6.2",
     "pydantic-settings>=2.10,<3",
     "qdrant-client>=1.15,<2",
     "sentence-transformers>=5,<6",

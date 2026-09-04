@@ -11,6 +11,7 @@ def test_evidence_creation() -> None:
     occurred_at = datetime(2026, 9, 3, 10, 30, tzinfo=UTC)
 
     evidence = Evidence(
+        event_id="EVT-JIRA-001",
         source_type=SourceType.JIRA,
         source_id="JIRA-101",
         content="Payment API integration is blocked.",

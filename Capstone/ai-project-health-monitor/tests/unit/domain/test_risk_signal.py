@@ -11,6 +11,7 @@ from ai_project_health_monitor.domain.models.risk_signal import (
 
 def test_risk_signal_creation() -> None:
     evidence = Evidence(
+        event_id="EVT-JIRA-001",
         source_type="jira",
         source_id="JIRA-101",
         content="Backend integration is blocked by the payment API.",
@@ -40,6 +41,7 @@ def test_confidence_must_be_between_zero_and_one(
     confidence: float,
 ) -> None:
     evidence = Evidence(
+        event_id="EVT-JIRA-101",
         source_type="jira",
         source_id="JIRA-101",
         content="The delivery is delayed.",
@@ -61,6 +63,7 @@ def test_confidence_must_be_between_zero_and_one(
 
 def test_risk_signal_rejects_unknown_risk_type() -> None:
     evidence = Evidence(
+        event_id="EVT-DOC-001",
         source_type="document",
         source_id="DOC-001",
         content="Something may be wrong.",

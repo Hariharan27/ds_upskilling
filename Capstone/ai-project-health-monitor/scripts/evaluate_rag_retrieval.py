@@ -5,6 +5,7 @@ from qdrant_client import QdrantClient
 
 from ai_project_health_monitor.evaluation.models.retrieval import (
     RetrievalEvaluationCase,
+    RetrievalEvaluationSummary,
 )
 from ai_project_health_monitor.evaluation.retrieval import RetrievalEvaluator
 from ai_project_health_monitor.ingestion.connectors.synthetic_document import (
@@ -21,6 +22,8 @@ from ai_project_health_monitor.rag.chunking import FixedSizeChunker
 from ai_project_health_monitor.rag.embeddings.bge import BGEEmbeddingModel
 from ai_project_health_monitor.rag.indexing import RAGIndexer
 from ai_project_health_monitor.rag.pipeline import RAGPipeline
+from ai_project_health_monitor.rag.reranking.bge import BGEReranker
+from ai_project_health_monitor.rag.reranking.service import RerankingService
 from ai_project_health_monitor.rag.retrieval import RetrievalService
 from ai_project_health_monitor.rag.vector_store.qdrant import QdrantVectorStore
 
@@ -49,8 +52,11 @@ def load_evaluation_cases() -> list[RetrievalEvaluationCase]:
     ]
 
 
-def build_pipeline() -> RAGPipeline:
-    """Build the real baseline RAG pipeline using in-memory Qdrant."""
+def build_pipeline(
+    *,
+    enable_reranking: bool,
+) -> RAGPipeline:
+    """Build a RAG pipeline with optional BGE reranking."""
     ingestion_service = IngestionService(
         connectors=[
             SyntheticJiraConnector(JIRA_DATA),
@@ -75,9 +81,16 @@ def build_pipeline() -> RAGPipeline:
         vector_store=vector_store,
     )
 
+    reranking_service = (
+        RerankingService(BGEReranker())
+        if enable_reranking
+        else None
+    )
+
     retrieval_service = RetrievalService(
         embedding_model=embedding_model,
         vector_store=vector_store,
+        reranking_service=reranking_service,
     )
 
     return RAGPipeline(
@@ -87,19 +100,17 @@ def build_pipeline() -> RAGPipeline:
     )
 
 
-def main() -> None:
-    """Run the baseline retrieval evaluation."""
-    pipeline = build_pipeline()
-    cases = load_evaluation_cases()
-
+def evaluate_pipeline(
+    pipeline: RAGPipeline,
+    cases: list[RetrievalEvaluationCase],
+) -> RetrievalEvaluationSummary:
+    """Index evaluation projects and return retrieval evaluation results."""
     project_ids = sorted(
         {case.project_id for case in cases}
     )
 
-    indexed_chunks = 0
-
     for project_id in project_ids:
-        indexed_chunks += pipeline.index_project(project_id)
+        pipeline.index_project(project_id)
 
     evaluator = RetrievalEvaluator(
         lambda query, project_id, limit: pipeline.retrieve(
@@ -109,15 +120,95 @@ def main() -> None:
         )
     )
 
-    summary = evaluator.evaluate(
+    return evaluator.evaluate(
         cases=cases,
         k=TOP_K,
     )
 
+
+def compare_rankings(
+    baseline_pipeline: RAGPipeline,
+    reranked_pipeline: RAGPipeline,
+    cases: list[RetrievalEvaluationCase],
+) -> None:
+    """Print cases where baseline and reranked rankings differ."""
+    print()
     print("=" * 60)
-    print("RAG RETRIEVAL BASELINE")
+    print("RANKING CHANGES")
     print("=" * 60)
-    print(f"Indexed chunks              : {indexed_chunks}")
+
+    changes_found = False
+
+    for case in cases:
+        baseline_results = baseline_pipeline.retrieve(
+            query=case.query,
+            project_id=case.project_id,
+            limit=TOP_K,
+        )
+
+        reranked_results = reranked_pipeline.retrieve(
+            query=case.query,
+            project_id=case.project_id,
+            limit=TOP_K,
+        )
+
+        baseline_ids = [
+            result.chunk.event_id
+            for result in baseline_results
+        ]
+        reranked_ids = [
+            result.chunk.event_id
+            for result in reranked_results
+        ]
+
+        if baseline_ids == reranked_ids:
+            continue
+
+        changes_found = True
+
+        print()
+        print(f"Query ID : {case.query_id}")
+        print(f"Query    : {case.query}")
+        print(f"Project  : {case.project_id}")
+        print(f"Relevant : {case.relevant_event_ids}")
+        print()
+        print("BASELINE")
+        for rank, result in enumerate(
+            baseline_results,
+            start=1,
+        ):
+            print(
+                f"  {rank}. "
+                f"{result.chunk.event_id} "
+                f"(score={result.score:.4f})"
+            )
+
+        print()
+        print("RERANKED")
+        for rank, result in enumerate(
+            reranked_results,
+            start=1,
+        ):
+            print(
+                f"  {rank}. "
+                f"{result.chunk.event_id} "
+                f"(score={result.score:.4f})"
+            )
+
+    if not changes_found:
+        print("No ranking changes detected.")
+
+    print("=" * 60)
+
+
+def print_summary(
+    title: str,
+    summary: RetrievalEvaluationSummary,
+) -> None:
+    """Print retrieval evaluation metrics."""
+    print("=" * 60)
+    print(title)
+    print("=" * 60)
     print(f"Evaluation cases            : {summary.total_cases}")
     print(f"Top K                       : {TOP_K}")
     print()
@@ -134,12 +225,104 @@ def main() -> None:
     )
     print()
     print("ISOLATION")
-    print(f"Cross-project result count  : {summary.cross_project_result_count}")
+    print(
+        f"Cross-project result count  : "
+        f"{summary.cross_project_result_count}"
+    )
     print("=" * 60)
 
-    if summary.cross_project_result_count > 0:
+
+def main() -> None:
+    """Compare baseline retrieval against BGE reranked retrieval."""
+    cases = load_evaluation_cases()
+
+    print("Building baseline retrieval pipeline...")
+    baseline_pipeline = build_pipeline(enable_reranking=False)
+    baseline_summary = evaluate_pipeline(
+        pipeline=baseline_pipeline,
+        cases=cases,
+    )
+
+    print("Building reranked retrieval pipeline...")
+    reranked_pipeline = build_pipeline(enable_reranking=True)
+    reranked_summary = evaluate_pipeline(
+        pipeline=reranked_pipeline,
+        cases=cases,
+    )
+
+    compare_rankings(
+    baseline_pipeline=baseline_pipeline,
+    reranked_pipeline=reranked_pipeline,
+    cases=cases,
+    )
+
+    print()
+    print_summary(
+        title="RAG RETRIEVAL BASELINE",
+        summary=baseline_summary,
+    )
+
+    print()
+    print_summary(
+        title="RAG RETRIEVAL WITH BGE RERANKING",
+        summary=reranked_summary,
+    )
+
+    print()
+    print("=" * 60)
+    print("RERANKING IMPACT")
+    print("=" * 60)
+    print(
+        f"Hit Rate delta              : "
+        f"{reranked_summary.hit_rate - baseline_summary.hit_rate:+.4f}"
+    )
+    print(
+        f"Precision@{TOP_K} delta       : "
+        f"{reranked_summary.mean_precision_at_k - baseline_summary.mean_precision_at_k:+.4f}"
+    )
+
+    baseline_recall = baseline_summary.mean_recall_at_k
+    reranked_recall = reranked_summary.mean_recall_at_k
+
+    if baseline_recall is None or reranked_recall is None:
+        recall_delta = None
+    else:
+        recall_delta = reranked_recall - baseline_recall
+
+    print(
+        f"Recall@{TOP_K} delta          : "
+        f"{recall_delta:+.4f}"
+        if recall_delta is not None
+        else f"Recall@{TOP_K} delta          : N/A"
+    )
+    
+    negative_fp_delta = (
+    reranked_summary.negative_false_positive_cases
+    - baseline_summary.negative_false_positive_cases
+    )
+
+    print(
+        f"Negative FP delta            : "
+        f"{negative_fp_delta:+d}"
+    )
+    cross_project_delta = (
+    reranked_summary.cross_project_result_count
+    - baseline_summary.cross_project_result_count
+    )
+    print(
+        f"Cross-project leakage delta  : "
+        f"{cross_project_delta:+d}"
+    )
+    print("=" * 60)
+
+    if baseline_summary.cross_project_result_count > 0:
         raise RuntimeError(
-            "retrieval evaluation detected cross-project leakage"
+            "baseline retrieval evaluation detected cross-project leakage"
+        )
+
+    if reranked_summary.cross_project_result_count > 0:
+        raise RuntimeError(
+            "reranked retrieval evaluation detected cross-project leakage"
         )
 
 
