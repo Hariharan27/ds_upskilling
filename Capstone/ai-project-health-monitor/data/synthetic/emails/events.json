@@ -28,5 +28,65 @@
     "recipient": "project-team@example.com",
     "content": "Thank you. The reporting module looks good and the release is on track.",
     "occurred_at": "2026-09-03T10:00:00Z"
+  },
+  {
+    "event_id": "EVT-EMAIL-004",
+    "project_id": "PROJ-001",
+    "message_id": "EMAIL-004",
+    "subject": "Release planning update",
+    "sender": "project-manager@example.com",
+    "recipient": "project-team@example.com",
+    "content": "The team is reviewing the remaining release activities and current timeline. The target release date remains under review.",
+    "occurred_at": "2026-09-03T11:15:00Z"
+  },
+  {
+    "event_id": "EVT-EMAIL-005",
+    "project_id": "PROJ-001",
+    "message_id": "EMAIL-005",
+    "subject": "QA testing progress",
+    "sender": "qa@example.com",
+    "recipient": "project-team@example.com",
+    "content": "Checkout validation testing is progressing, but several edge cases still need to be resolved before the release.",
+    "occurred_at": "2026-09-03T12:00:00Z"
+  },
+  {
+    "event_id": "EVT-EMAIL-006",
+    "project_id": "PROJ-001",
+    "message_id": "EMAIL-006",
+    "subject": "Deployment preparation",
+    "sender": "devops@example.com",
+    "recipient": "project-team@example.com",
+    "content": "Deployment configuration for the upcoming release is being prepared. No deployment blocker has been identified.",
+    "occurred_at": "2026-09-03T13:00:00Z"
+  },
+  {
+    "event_id": "EVT-EMAIL-007",
+    "project_id": "PROJ-001",
+    "message_id": "EMAIL-007",
+    "subject": "Authentication progress",
+    "sender": "developer@example.com",
+    "recipient": "project-team@example.com",
+    "content": "The authentication service is progressing according to plan and there are no current delivery concerns.",
+    "occurred_at": "2026-09-03T14:00:00Z"
+  },
+  {
+    "event_id": "EVT-EMAIL-008",
+    "project_id": "PROJ-002",
+    "message_id": "EMAIL-008",
+    "subject": "Reporting performance update",
+    "sender": "developer@example.com",
+    "recipient": "project-team@example.com",
+    "content": "Performance testing for the reporting dashboard is progressing within the planned timeline.",
+    "occurred_at": "2026-09-03T14:30:00Z"
+  },
+  {
+    "event_id": "EVT-EMAIL-009",
+    "project_id": "PROJ-002",
+    "message_id": "EMAIL-009",
+    "subject": "User acceptance testing",
+    "sender": "qa@example.com",
+    "recipient": "project-team@example.com",
+    "content": "User acceptance testing for the reporting workflow has completed successfully with no release concerns.",
+    "occurred_at": "2026-09-03T15:00:00Z"
   }
 ]

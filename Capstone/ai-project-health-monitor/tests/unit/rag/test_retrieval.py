@@ -28,6 +28,7 @@ class FakeVectorStore(VectorStore):
         self.received_embedding: list[float] | None = None
         self.received_project_id: str | None = None
         self.received_limit: int | None = None
+        self.results: list[RetrievalResult] = []
 
     def upsert(
         self,
@@ -62,12 +63,37 @@ class FakeVectorStore(VectorStore):
             ),
         )
 
-        return [
+        self.results = [
             RetrievalResult(
                 chunk=chunk,
                 score=0.95,
             )
         ]
+
+        return self.results
+
+def make_result(event_id: str, score: float) -> RetrievalResult:
+    """Create a deterministic retrieval result for retrieval tests."""
+    chunk = DocumentChunk(
+        chunk_id=f"CHUNK-{event_id}",
+        project_id="PROJ-001",
+        event_id=event_id,
+        source_type=SourceType.JIRA,
+        source_id=f"SOURCE-{event_id}",
+        content=f"Content for {event_id}",
+        chunk_index=0,
+        occurred_at=datetime(
+            2026,
+            9,
+            1,
+            tzinfo=UTC,
+        ),
+    )
+
+    return RetrievalResult(
+        chunk=chunk,
+        score=score,
+    )
 
 
 @pytest.fixture
@@ -165,3 +191,5 @@ def test_retrieve_rejects_invalid_embedding_response(
             query="payment issue",
             project_id="PROJ-001",
         )
+
+
