@@ -1,0 +1,127 @@
+[
+  {
+    "query_id": "RAG-001",
+    "query": "Why is the payment integration blocked?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-JIRA-001"
+    ]
+  },
+  {
+    "query_id": "RAG-002",
+    "query": "Is the release date at risk?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-JIRA-002",
+      "EVT-EMAIL-001"
+    ]
+  },
+  {
+    "query_id": "RAG-003",
+    "query": "What additional requirement did the client request?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-EMAIL-002"
+    ]
+  },
+  {
+    "query_id": "RAG-004",
+    "query": "Is the reporting module on track?",
+    "project_id": "PROJ-002",
+    "relevant_event_ids": [
+      "EVT-JIRA-003",
+      "EVT-EMAIL-003"
+    ]
+  },
+  {
+    "query_id": "RAG-005",
+    "query": "What is preventing the payment API work from progressing?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-JIRA-001"
+    ]
+  },
+  {
+    "query_id": "RAG-006",
+    "query": "What is causing concern about the planned delivery?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-JIRA-002",
+      "EVT-EMAIL-001"
+    ]
+  },
+  {
+    "query_id": "RAG-007",
+    "query": "What new work has the client asked to add?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-EMAIL-002"
+    ]
+  },
+  {
+    "query_id": "RAG-008",
+    "query": "Which external dependency is holding up the integration?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-JIRA-001"
+    ]
+  },
+  {
+    "query_id": "RAG-009",
+    "query": "Tell me about the successful reporting delivery.",
+    "project_id": "PROJ-002",
+    "relevant_event_ids": [
+      "EVT-JIRA-003",
+      "EVT-EMAIL-003"
+    ]
+  },
+  {
+    "query_id": "RAG-010",
+    "query": "What caused the payment API integration issue?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-JIRA-001"
+    ]
+  },
+  {
+    "query_id": "RAG-011",
+    "query": "Is there any indication that the current release timeline is being affected?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-JIRA-002",
+      "EVT-EMAIL-001"
+    ]
+  },
+  {
+    "query_id": "RAG-012",
+    "query": "What does the client think about the current delivery timeline?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": [
+      "EVT-EMAIL-001"
+    ]
+  },
+  {
+    "query_id": "RAG-NEG-001",
+    "query": "What database migration was completed?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": []
+  },
+  {
+    "query_id": "RAG-NEG-002",
+    "query": "Which mobile application redesign was delivered?",
+    "project_id": "PROJ-001",
+    "relevant_event_ids": []
+  },
+  {
+    "query_id": "RAG-NEG-003",
+    "query": "What cloud infrastructure upgrade was completed?",
+    "project_id": "PROJ-002",
+    "relevant_event_ids": []
+  },
+  {
+    "query_id": "RAG-NEG-004",
+    "query": "Which security audit was successfully closed?",
+    "project_id": "PROJ-002",
+    "relevant_event_ids": []
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "event_id": "EVT-EMAIL-001",
+    "project_id": "PROJ-001",
+    "message_id": "EMAIL-001",
+    "subject": "Payment integration blocked",
+    "sender": "client@example.com",
+    "recipient": "project-team@example.com",
+    "content": "We are concerned that the payment integration is still blocked. This is affecting our planned release date.",
+    "occurred_at": "2026-09-02T11:00:00Z"
+  },
+  {
+    "event_id": "EVT-EMAIL-002",
+    "project_id": "PROJ-001",
+    "message_id": "EMAIL-002",
+    "subject": "Additional reporting requirement",
+    "sender": "client@example.com",
+    "recipient": "project-team@example.com",
+    "content": "We would also like to include an additional reporting dashboard in the current release.",
+    "occurred_at": "2026-09-03T09:15:00Z"
+  },
+  {
+    "event_id": "EVT-EMAIL-003",
+    "project_id": "PROJ-002",
+    "message_id": "EMAIL-003",
+    "subject": "Release confirmation",
+    "sender": "client@example.com",
+    "recipient": "project-team@example.com",
+    "content": "Thank you. The reporting module looks good and the release is on track.",
+    "occurred_at": "2026-09-03T10:00:00Z"
+  }
+]
