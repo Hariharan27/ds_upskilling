@@ -246,19 +246,21 @@ class ApplicationContainer:
             ingestion_service=self.ingestion_service,
         )
 
-        self.project_health_monitor = ProjectHealthMonitor(
-            graph=self.graph,
-            health_trend_service=self.health_trend_service,
-        )
-
-        self.health_monitor_scheduler = HealthMonitorScheduler(
-            monitor=self.project_health_monitor,
-        )
-
         self.rag_indexer = RAGIndexer(
             chunker=FixedSizeChunker(),
             embedding_model=self.embedding_model,
             vector_store=self.vector_store,
+        )
+
+        self.project_health_monitor = ProjectHealthMonitor(
+            graph=self.graph,
+            health_trend_service=self.health_trend_service,
+            ingestion_service=self.ingestion_service,
+            rag_indexer=self.rag_indexer,
+        )
+
+        self.health_monitor_scheduler = HealthMonitorScheduler(
+            monitor=self.project_health_monitor,
         )
 
 
