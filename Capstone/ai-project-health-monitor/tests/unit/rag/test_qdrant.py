@@ -41,6 +41,10 @@ def create_chunk(
             1,
             tzinfo=UTC,
         ),
+        metadata={
+            "status": "Done",
+            "priority": "High",
+        },
     )
 
 
@@ -79,6 +83,10 @@ def test_upsert_and_search_returns_matching_chunks(
     assert results[0].chunk.chunk_id == "CHUNK-001"
     assert results[1].chunk.chunk_id == "CHUNK-002"
     assert results[0].score > results[1].score
+    assert results[0].chunk.metadata == {
+        "status": "Done",
+        "priority": "High",
+    }
 
 
 def test_search_filters_by_project(

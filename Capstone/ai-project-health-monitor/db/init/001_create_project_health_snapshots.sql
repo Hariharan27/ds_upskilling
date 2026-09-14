@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS project_health_snapshots (
     health_score DOUBLE PRECISION NOT NULL,
     health_status TEXT NOT NULL,
     risk_signals JSONB NOT NULL DEFAULT '[]'::jsonb,
+    summary JSONB,
     calculated_at TIMESTAMPTZ NOT NULL,
     evidence_fingerprint TEXT NOT NULL
 );

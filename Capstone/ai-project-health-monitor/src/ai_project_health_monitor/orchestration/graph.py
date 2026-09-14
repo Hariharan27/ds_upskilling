@@ -1,3 +1,4 @@
+from ai_project_health_monitor.orchestration.nodes.reconcile_risk_state import ReconcileRiskStateNode
 from langgraph import graph
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
@@ -74,6 +75,12 @@ from ai_project_health_monitor.analysis.risk_change_detector import (
 from ai_project_health_monitor.orchestration.nodes.investigate_risk_changes import (
     InvestigateRiskChangesNode,
 )
+from ai_project_health_monitor.analysis.risk_state_reconciler import (
+    RiskStateReconciler,
+)
+from ai_project_health_monitor.orchestration.nodes.reconcile_risk_state import (
+    ReconcileRiskStateNode,
+)
 
 
 def route_after_alert_evaluation(
@@ -109,6 +116,7 @@ def build_project_health_graph(
     risk_consolidator: RiskConsolidator,
     risk_change_detector: RiskChangeDetector,
     risk_change_investigator: LLMRiskChangeInvestigator,
+    risk_state_reconciler: RiskStateReconciler,
     health_scorer: HealthScorer,
     summary_generator: HealthSummaryGenerator,
     alert_evaluator: HealthAlertEvaluator,
@@ -138,6 +146,10 @@ def build_project_health_graph(
     investigate_risk_changes_node = InvestigateRiskChangesNode(
     risk_change_detector=risk_change_detector,
     risk_change_investigator=risk_change_investigator,
+    )
+
+    reconcile_risk_state_node = ReconcileRiskStateNode(
+        risk_state_reconciler=risk_state_reconciler,
     )
 
     consolidate_risks_node = ConsolidateRisksNode(
@@ -191,6 +203,10 @@ def build_project_health_graph(
     "investigate_risk_changes",
     investigate_risk_changes_node,
     )
+    graph.add_node(
+    "reconcile_risk_state",
+    reconcile_risk_state_node,
+    )
     graph.add_node("consolidate_risks", consolidate_risks_node)
     graph.add_node("calculate_health", calculate_health_node)
     graph.add_node("generate_summary", generate_summary_node)
@@ -241,7 +257,11 @@ def build_project_health_graph(
         "investigate_risk_changes",
     )
     graph.add_edge(
-        "investigate_risk_changes",
+    "investigate_risk_changes",
+    "reconcile_risk_state",
+    )
+    graph.add_edge(
+        "reconcile_risk_state",
         "consolidate_risks",
     )
     graph.add_edge("consolidate_risks", "calculate_health")

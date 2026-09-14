@@ -45,6 +45,9 @@ from ai_project_health_monitor.domain.models.project_event import (
 from ai_project_health_monitor.analysis.risk_change_investigator import (
     RiskChangeInvestigator,
 )
+from ai_project_health_monitor.analysis.risk_state_reconciler import (
+    RiskStateReconciler,
+)
 
 
 def test_project_health_graph_can_be_compiled() -> None:
@@ -52,6 +55,8 @@ def test_project_health_graph_can_be_compiled() -> None:
     risk_analyzer = Mock(spec=LLMRiskAnalyzer)
     risk_consolidator = Mock(spec=RiskConsolidator)
     risk_change_investigator = Mock(spec=RiskChangeInvestigator)
+    risk_state_reconciler = Mock(spec=RiskStateReconciler)
+    
     health_scorer = Mock(spec=HealthScorer)
     summary_generator = Mock(spec=HealthSummaryGenerator)
     notifier = Mock(spec=AlertNotifier)
@@ -70,6 +75,7 @@ def test_project_health_graph_can_be_compiled() -> None:
         risk_consolidator=risk_consolidator,
         risk_change_detector=risk_change_detector,
         risk_change_investigator=risk_change_investigator,
+        risk_state_reconciler=risk_state_reconciler,
         health_scorer=health_scorer,
         summary_generator=summary_generator,
         alert_evaluator = Mock(spec=HealthAlertEvaluator),
@@ -146,6 +152,9 @@ def test_project_health_graph_runs_risk_change_investigation() -> None:
     ingestion_service = Mock(spec=IngestionService)
     risk_change_investigator = Mock(spec=RiskChangeInvestigator)
     risk_change_investigator.investigate.return_value = []
+    risk_state_reconciler = Mock(spec=RiskStateReconciler)
+    risk_state_reconciler.reconcile.return_value = []
+
 
     ingestion_service.ingest_project.return_value = []
 
@@ -188,6 +197,7 @@ def test_project_health_graph_runs_risk_change_investigation() -> None:
         risk_consolidator=risk_consolidator,
         risk_change_detector=risk_change_detector,
         risk_change_investigator=risk_change_investigator,
+        risk_state_reconciler=risk_state_reconciler,
         health_scorer=health_scorer,
         summary_generator=summary_generator,
         alert_evaluator=alert_evaluator,
@@ -214,6 +224,7 @@ def test_project_health_graph_returns_previous_health_when_evidence_is_unchanged
     risk_analyzer = Mock(spec=LLMRiskAnalyzer)
     risk_consolidator = Mock(spec=RiskConsolidator)
     risk_change_investigator = Mock(spec=RiskChangeInvestigator)
+    risk_state_reconciler = Mock(spec=RiskStateReconciler)
     health_scorer = Mock(spec=HealthScorer)
     summary_generator = Mock(spec=HealthSummaryGenerator)
     alert_evaluator = Mock(spec=HealthAlertEvaluator)
@@ -245,6 +256,7 @@ def test_project_health_graph_returns_previous_health_when_evidence_is_unchanged
         risk_consolidator=risk_consolidator,
         risk_change_detector=risk_change_detector,
         risk_change_investigator=risk_change_investigator,
+        risk_state_reconciler=risk_state_reconciler,
         health_scorer=health_scorer,
         summary_generator=summary_generator,
         alert_evaluator=alert_evaluator,
@@ -279,6 +291,8 @@ def test_project_health_graph_investigates_risk_changes_when_evidence_changes() 
     risk_change_detector = Mock(spec=RiskChangeDetector)
     risk_change_investigator = Mock(spec=RiskChangeInvestigator)
     risk_change_investigator.investigate.return_value = []
+    risk_state_reconciler = Mock(spec=RiskStateReconciler)
+    risk_state_reconciler.reconcile.return_value = []
     health_scorer = Mock(spec=HealthScorer)
     summary_generator = Mock(spec=HealthSummaryGenerator)
     alert_evaluator = Mock(spec=HealthAlertEvaluator)
@@ -351,6 +365,7 @@ def test_project_health_graph_investigates_risk_changes_when_evidence_changes() 
         risk_consolidator=risk_consolidator,
         risk_change_detector=risk_change_detector,
         risk_change_investigator=risk_change_investigator,
+        risk_state_reconciler=risk_state_reconciler,
         health_scorer=health_scorer,
         summary_generator=summary_generator,
         alert_evaluator=alert_evaluator,

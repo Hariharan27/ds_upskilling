@@ -53,6 +53,7 @@ def test_evaluate_case_detects_true_positive() -> None:
     case = RiskEvaluationCase(
         case_id="RISK-001",
         project_id="PROJ-001",
+        query="What risks are affecting the payment API integration?",
         evidence_event_ids=["EVT-JIRA-001"],
         expected_risk_types=[RiskType.BLOCKER],
         expected_severities=[RiskSeverity.HIGH],
@@ -80,6 +81,7 @@ def test_evaluate_case_detects_false_positive() -> None:
     case = RiskEvaluationCase(
         case_id="RISK-002",
         project_id="PROJ-001",
+        query="What risks are affecting the payment API integration?",
         evidence_event_ids=["EVT-JIRA-001"],
         expected_risk_types=[RiskType.BLOCKER],
         expected_severities=[RiskSeverity.HIGH],
@@ -107,6 +109,7 @@ def test_evaluate_case_detects_no_risk_correctly() -> None:
     case = RiskEvaluationCase(
         case_id="RISK-003",
         project_id="PROJ-001",
+        query="What risks are affecting the payment API integration?",
         evidence_event_ids=["EVT-JIRA-001"],
         expected_risk_types=[],
         expected_severities=[],
@@ -138,6 +141,7 @@ def test_evaluate_case_detects_incorrect_severity() -> None:
     case = RiskEvaluationCase(
         case_id="RISK-004",
         project_id="PROJ-001",
+        query="What risks are affecting the payment API integration?",
         evidence_event_ids=["EVT-JIRA-001"],
         expected_risk_types=[RiskType.BLOCKER],
         expected_severities=[RiskSeverity.HIGH],
@@ -167,6 +171,7 @@ def test_evaluate_case_detects_incorrect_evidence() -> None:
     case = RiskEvaluationCase(
         case_id="RISK-005",
         project_id="PROJ-001",
+        query="What risks are affecting the payment API integration?",
         evidence_event_ids=["EVT-JIRA-001"],
         expected_risk_types=[RiskType.BLOCKER],
         expected_severities=[RiskSeverity.HIGH],
@@ -196,6 +201,7 @@ def test_evaluate_calculates_metrics() -> None:
         RiskEvaluationCase(
             case_id="RISK-006",
             project_id="PROJ-001",
+            query="What risks are affecting the payment API integration?",
             evidence_event_ids=["EVT-JIRA-001"],
             expected_risk_types=[RiskType.BLOCKER],
             expected_severities=[RiskSeverity.HIGH],
@@ -204,6 +210,7 @@ def test_evaluate_calculates_metrics() -> None:
         RiskEvaluationCase(
             case_id="RISK-007",
             project_id="PROJ-001",
+            query="What risks are affecting the payment API integration?",
             evidence_event_ids=["EVT-JIRA-001"],
             expected_risk_types=[RiskType.BLOCKER],
             expected_severities=[RiskSeverity.HIGH],

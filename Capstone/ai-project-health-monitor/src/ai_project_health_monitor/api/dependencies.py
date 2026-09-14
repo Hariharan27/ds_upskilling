@@ -22,10 +22,15 @@ from ai_project_health_monitor.analysis.risk_consolidator import (
 from ai_project_health_monitor.analysis.risk_grounding_validator import (
     DeterministicRiskGroundingValidator,
 )
-from ai_project_health_monitor.core.config import Settings, get_settings
+from ai_project_health_monitor.core.config import (
+    ProjectSourceProvider,
+    Settings,
+    get_settings,
+)
 from ai_project_health_monitor.ingestion.connectors.base import (
     ProjectSourceConnector,
 )
+from ai_project_health_monitor.ingestion.connectors.jira import JiraConnector
 from ai_project_health_monitor.ingestion.connectors.synthetic_document import (
     SyntheticDocumentConnector,
 )
@@ -108,6 +113,10 @@ from ai_project_health_monitor.analysis.risk_change_detector import (
 from ai_project_health_monitor.analysis.llm_risk_change_investigator import (
     LLMRiskChangeInvestigator,
 )
+from ai_project_health_monitor.analysis.risk_state_reconciler import (
+    RiskStateReconciler,
+)
+from ai_project_health_monitor.ingestion.connectors.gmail import GmailConnector
 
 
 class ApplicationContainer:
@@ -191,6 +200,7 @@ class ApplicationContainer:
         risk_change_investigator = LLMRiskChangeInvestigator(
             llm_client=self.llm_client,
         )
+        risk_state_reconciler = RiskStateReconciler()
         health_scorer = DeterministicHealthScorer()
 
         summary_generator = LLMHealthSummaryGenerator(
@@ -223,6 +233,7 @@ class ApplicationContainer:
             risk_consolidator=risk_consolidator,
             risk_change_detector=risk_change_detector,
             risk_change_investigator=risk_change_investigator,
+            risk_state_reconciler=risk_state_reconciler,
             health_scorer=health_scorer,
             summary_generator=summary_generator,
             alert_evaluator=alert_evaluator,
@@ -255,17 +266,63 @@ class ApplicationContainer:
     def _build_connectors(
         settings: Settings,
     ) -> list[ProjectSourceConnector]:
-        return [
-            SyntheticJiraConnector(
-                source_path=Path(settings.jira_source_path),
-            ),
-            SyntheticEmailConnector(
-                source_path=Path(settings.email_source_path),
-            ),
-            SyntheticDocumentConnector(
-                source_directory=Path(settings.document_source_directory),
-            ),
-        ]
+        connectors: list[ProjectSourceConnector] = []
+
+        if ProjectSourceProvider.SYNTHETIC in settings.project_source_providers:
+            connectors.extend(
+                [
+                    SyntheticJiraConnector(
+                        source_path=Path(settings.jira_source_path),
+                    ),
+                    SyntheticEmailConnector(
+                        source_path=Path(settings.email_source_path),
+                    ),
+                    SyntheticDocumentConnector(
+                        source_directory=Path(settings.document_source_directory),
+                    ),
+                ]
+            )
+
+        if ProjectSourceProvider.JIRA in settings.project_source_providers:
+            if not settings.jira_base_url:
+                raise ValueError("JIRA base URL is required")
+            if not settings.jira_email:
+                raise ValueError("JIRA email is required")
+            if not settings.jira_api_token:
+                raise ValueError("JIRA API token is required")
+            if not settings.jira_project_key:
+                raise ValueError("JIRA project key is required")
+
+            connectors.append(
+                JiraConnector(
+                    base_url=settings.jira_base_url,
+                    email=settings.jira_email,
+                    api_token=settings.jira_api_token,
+                    project_key=settings.jira_project_key,
+                )
+            )
+
+        if ProjectSourceProvider.GMAIL in settings.project_source_providers:
+            credentials_path = Path(settings.gmail_credentials_path)
+
+            if not credentials_path.exists():
+                raise ValueError(
+                    f"Gmail credentials file not found: {credentials_path}"
+                )
+
+            connectors.append(
+                GmailConnector(
+                    credentials_path=credentials_path,
+                    token_path=Path(settings.gmail_token_path),
+                )
+            )
+
+        if not connectors:
+            raise ValueError(
+                "At least one project source provider must be configured"
+            )
+
+        return connectors
 
 
 @lru_cache

@@ -14,10 +14,6 @@ from ai_project_health_monitor.evaluation.risk import RiskEvaluator
 class RiskEvaluationRunner:
     """Run golden risk-analysis cases against the production risk analyzer."""
 
-    EVALUATION_QUERY = (
-        "Identify all project risks present in the provided evidence."
-    )
-
     def __init__(
         self,
         risk_analyzer: LLMRiskAnalyzer,
@@ -43,11 +39,12 @@ class RiskEvaluationRunner:
 
         def analyze(
             project_id: str,
+            query: str,
             evidence: list,
         ):
             return self._risk_analyzer.analyze(
                 project_id,
-                self.EVALUATION_QUERY,
+                query,
                 evidence,
             )
 

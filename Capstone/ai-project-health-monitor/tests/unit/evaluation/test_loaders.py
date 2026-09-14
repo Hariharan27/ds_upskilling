@@ -10,12 +10,13 @@ from ai_project_health_monitor.evaluation.loaders import (
 
 def test_load_risk_evaluation_cases(tmp_path) -> None:
     dataset = [
-        {
-            "case_id": "RISK-001",
-            "project_id": "PROJ-001",
-            "evidence_event_ids": ["EVT-JIRA-001"],
-            "expected_risk_types": ["blocker"],
-            "expected_severities": ["high"],
+         {
+        "case_id": "RISK-001",
+        "project_id": "PROJ-001",
+        "query": "What risks are affecting the payment API integration?",
+        "evidence_event_ids": ["EVT-JIRA-001"],
+        "expected_risk_types": ["blocker"],
+        "expected_severities": ["high"],
         }
     ]
 

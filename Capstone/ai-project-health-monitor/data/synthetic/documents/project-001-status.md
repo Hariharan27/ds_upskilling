@@ -2,10 +2,9 @@
 
 ## Current Status
 
-The backend team is three days behind the planned milestone.
+The payment API integration is now unblocked because the external API team
 
-The payment API integration is currently blocked because the external API
-team has not provided the required credentials.
+has provided the required credentials and integration work has resumed.
 
 ## Delivery Impact
 

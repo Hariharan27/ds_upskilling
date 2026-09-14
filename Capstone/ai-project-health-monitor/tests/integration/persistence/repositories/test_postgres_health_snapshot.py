@@ -9,6 +9,9 @@ from ai_project_health_monitor.persistence.health_snapshot import (
 from ai_project_health_monitor.persistence.repositories.postgres_health_snapshot import (
     PostgresHealthSnapshotRepository,
 )
+from ai_project_health_monitor.domain.models.project_health_summary import (
+    ProjectHealthSummary,
+)
 
 
 POSTGRES_DSN = (
@@ -34,12 +37,14 @@ def _snapshot(
     score: float,
     calculated_at: datetime,
     fingerprint: str,
+    summary: ProjectHealthSummary | None = None,
 ) -> ProjectHealthSnapshot:
     return ProjectHealthSnapshot(
         project_id=project_id,
         health_score=score,
         health_status=HealthStatus.HEALTHY,
         risk_signals=[],
+        summary=summary,
         calculated_at=calculated_at,
         evidence_fingerprint=fingerprint,
     )
@@ -49,11 +54,21 @@ def test_postgres_repository_saves_and_reads_snapshots() -> None:
     repository = PostgresHealthSnapshotRepository(POSTGRES_DSN)
     _clear_test_project()
 
+    first_summary = ProjectHealthSummary(
+        project_id="TEST-PROJ",
+        health_score=80.0,
+        health_status=HealthStatus.HEALTHY,
+        executive_summary="Project is healthy with no significant risks.",
+        top_risks=[],
+        recommended_actions=["Continue monitoring project progress."],
+    )
+
     first = _snapshot(
         project_id="TEST-PROJ",
         score=80.0,
         calculated_at=datetime(2026, 9, 12, 10, tzinfo=UTC),
         fingerprint="fingerprint-1",
+        summary=first_summary,
     )
     second = _snapshot(
         project_id="TEST-PROJ",
@@ -72,6 +87,7 @@ def test_postgres_repository_saves_and_reads_snapshots() -> None:
     assert latest.health_score == second.health_score
     assert latest.health_status == second.health_status
     assert latest.risk_signals == second.risk_signals
+    assert latest.summary == second.summary
     assert latest.evidence_fingerprint == second.evidence_fingerprint
     assert latest.calculated_at == second.calculated_at.astimezone(UTC)
 
@@ -80,6 +96,7 @@ def test_postgres_repository_saves_and_reads_snapshots() -> None:
     assert history[0].health_score == first.health_score
     assert history[0].health_status == first.health_status
     assert history[0].risk_signals == first.risk_signals
+    assert history[0].summary == first.summary
     assert history[0].evidence_fingerprint == first.evidence_fingerprint
     assert history[0].calculated_at == first.calculated_at.astimezone(UTC)
 
@@ -87,5 +104,6 @@ def test_postgres_repository_saves_and_reads_snapshots() -> None:
     assert history[1].health_score == second.health_score
     assert history[1].health_status == second.health_status
     assert history[1].risk_signals == second.risk_signals
+    assert history[1].summary == second.summary
     assert history[1].evidence_fingerprint == second.evidence_fingerprint
     assert history[1].calculated_at == second.calculated_at.astimezone(UTC)

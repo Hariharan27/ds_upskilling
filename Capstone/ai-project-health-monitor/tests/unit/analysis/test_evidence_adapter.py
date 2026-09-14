@@ -25,6 +25,10 @@ def test_from_retrieval_results_converts_chunks_to_evidence() -> None:
                 content="Payment API integration is blocked.",
                 chunk_index=0,
                 occurred_at=occurred_at,
+                metadata={
+                    "status": "Done",
+                    "priority": "High",
+                },
             ),
             score=0.92,
         )
@@ -37,6 +41,10 @@ def test_from_retrieval_results_converts_chunks_to_evidence() -> None:
     assert evidence[0].source_id == "EVT-JIRA-001"
     assert evidence[0].content == "Payment API integration is blocked."
     assert evidence[0].occurred_at == occurred_at
+    assert evidence[0].metadata == {
+        "status": "Done",
+        "priority": "High",
+    }
 
 
 def test_from_retrieval_results_preserves_result_order() -> None:

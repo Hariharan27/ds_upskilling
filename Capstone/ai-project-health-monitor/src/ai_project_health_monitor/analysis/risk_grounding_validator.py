@@ -44,6 +44,8 @@ class DeterministicRiskGroundingValidator(RiskGroundingValidator):
         RiskType.SCOPE_CREEP: (
             "additional requirement",
             "additional requirements",
+            "additional reporting requirement",
+            "additional reporting dashboard",
             "not included in the original scope",
             "not included in the original project scope",
             "outside the original scope",

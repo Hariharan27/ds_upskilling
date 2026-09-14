@@ -37,6 +37,7 @@ def test_runner_loads_evidence_and_calls_risk_analyzer(tmp_path) -> None:
             {
                 "case_id": "RISK-001",
                 "project_id": "PROJ-001",
+                "query": "What risks are affecting the payment API integration?",
                 "evidence_event_ids": ["EVT-JIRA-001"],
                 "expected_risk_types": ["blocker"],
                 "expected_severities": ["high"],
@@ -83,6 +84,6 @@ def test_runner_loads_evidence_and_calls_risk_analyzer(tmp_path) -> None:
     )
     risk_analyzer.analyze.assert_called_once_with(
         "PROJ-001",
-        RiskEvaluationRunner.EVALUATION_QUERY,
+        "What risks are affecting the payment API integration?",
         [evidence],
     )

@@ -45,6 +45,10 @@ def previous_risk() -> RiskSignal:
                 "external API credentials are missing."
             ),
             occurred_at=datetime(2026, 9, 1, tzinfo=UTC),
+            metadata={
+                "status": "Done",
+                "priority": "High",
+            },
         ),
         evidence_quote=(
             "Payment API integration is blocked because "
@@ -72,6 +76,10 @@ def current_risk() -> RiskSignal:
                 "external API credentials."
             ),
             occurred_at=datetime(2026, 9, 10, tzinfo=UTC),
+            metadata={
+                "status": "Done",
+                "priority": "High",
+            },
         ),
         evidence_quote=(
             "Payment API integration is still waiting for "
@@ -93,6 +101,10 @@ def evidence() -> list[Evidence]:
                 "external API credentials."
             ),
             occurred_at=datetime(2026, 9, 10, tzinfo=UTC),
+            metadata={
+                "status": "Done",
+                "priority": "High",
+            },
         )
     ]
 
@@ -405,5 +417,7 @@ def test_build_prompt_contains_risk_history_and_evidence(
     assert "RISK-PREV-001" in prompt
     assert "RISK-CURRENT-001" in prompt
     assert "JIRA-002" in prompt
+    assert "'status': 'Done'" in prompt
+    assert "'priority': 'High'" in prompt
     assert "same underlying issue" in prompt
     assert "Do not calculate or provide a health score." in prompt

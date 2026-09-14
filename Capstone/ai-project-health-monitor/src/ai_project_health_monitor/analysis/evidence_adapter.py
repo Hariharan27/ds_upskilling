@@ -17,6 +17,7 @@ class EvidenceAdapter:
                 source_id=result.chunk.source_id,
                 content=result.chunk.content,
                 occurred_at=result.chunk.occurred_at,
+                metadata=result.chunk.metadata,
             )
             for result in results
         ]

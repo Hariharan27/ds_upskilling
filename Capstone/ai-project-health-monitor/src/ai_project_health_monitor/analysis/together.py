@@ -12,14 +12,24 @@ class TogetherLLMClient(LLMClient):
         self,
         model: str,
         api_key: str,
+        *,
+        max_tokens: int = 2048,
+        reasoning_effort: str = "low",
     ) -> None:
         if not model.strip():
             raise ValueError("model must not be empty")
-
         if not api_key.strip():
             raise ValueError("api_key must not be empty")
+        if max_tokens < 1:
+            raise ValueError("max_tokens must be greater than zero")
+        if reasoning_effort not in {"low", "medium", "high"}:
+            raise ValueError(
+                "reasoning_effort must be one of: low, medium, high"
+            )
 
         self._model = model
+        self._max_tokens = max_tokens
+        self._reasoning_effort = reasoning_effort
         self._client = Together(api_key=api_key)
 
     def generate(
@@ -39,6 +49,8 @@ class TogetherLLMClient(LLMClient):
                     "content": prompt,
                 }
             ],
+            "max_tokens": self._max_tokens,
+            "reasoning_effort": self._reasoning_effort,
         }
 
         if response_format is not None:
@@ -47,10 +59,6 @@ class TogetherLLMClient(LLMClient):
         response = self._client.chat.completions.create(
             **request,
         )
-        
-        print("\n========== TOGETHER RESPONSE ==========")
-        print(response)
-        print("========================================\n")
 
         choice = response.choices[0]
         message = choice.message

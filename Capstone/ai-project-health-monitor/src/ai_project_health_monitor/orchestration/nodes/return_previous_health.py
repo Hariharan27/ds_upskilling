@@ -28,4 +28,5 @@ class ReturnPreviousHealthNode:
             "health_score": health_score,
             "primary_risks": snapshot.risk_signals,
             "risk_signals": snapshot.risk_signals,
+            "summary": snapshot.summary,
         }

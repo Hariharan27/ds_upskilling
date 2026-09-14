@@ -152,6 +152,7 @@ class LLMRiskChangeInvestigator(RiskChangeInvestigator):
                 f"source_id: {item.source_id}\n"
                 f"source_type: {item.source_type.value}\n"
                 f"occurred_at: {item.occurred_at.isoformat()}\n"
+                f"metadata: {item.metadata}\n"
                 f"content: {item.content}"
             )
             for index, item in enumerate(evidence, start=1)

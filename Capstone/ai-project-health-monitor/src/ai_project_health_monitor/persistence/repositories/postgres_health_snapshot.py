@@ -31,6 +31,7 @@ class PostgresHealthSnapshotRepository(HealthSnapshotRepository):
                         health_score,
                         health_status,
                         risk_signals,
+                        summary,
                         calculated_at,
                         evidence_fingerprint
                     )
@@ -39,6 +40,7 @@ class PostgresHealthSnapshotRepository(HealthSnapshotRepository):
                         %(health_score)s,
                         %(health_status)s,
                         %(risk_signals)s::jsonb,
+                        %(summary)s::jsonb,
                         %(calculated_at)s,
                         %(evidence_fingerprint)s
                     )
@@ -52,6 +54,11 @@ class PostgresHealthSnapshotRepository(HealthSnapshotRepository):
                                 mode="json",
                                 include={"risk_signals"},
                             )["risk_signals"],
+                        ),
+                        "summary": Jsonb(
+                            snapshot.summary.model_dump(mode="json")
+                            if snapshot.summary is not None
+                            else None,
                         ),
                         "calculated_at": snapshot.calculated_at,
                         "evidence_fingerprint": snapshot.evidence_fingerprint,
@@ -76,6 +83,7 @@ class PostgresHealthSnapshotRepository(HealthSnapshotRepository):
                         health_score,
                         health_status,
                         risk_signals,
+                        summary,
                         calculated_at,
                         evidence_fingerprint
                     FROM project_health_snapshots
@@ -109,6 +117,7 @@ class PostgresHealthSnapshotRepository(HealthSnapshotRepository):
                         health_score,
                         health_status,
                         risk_signals,
+                        summary,
                         calculated_at,
                         evidence_fingerprint
                     FROM project_health_snapshots
@@ -129,6 +138,7 @@ class PostgresHealthSnapshotRepository(HealthSnapshotRepository):
             health_score=row["health_score"],
             health_status=row["health_status"],
             risk_signals=row["risk_signals"],
+            summary=row["summary"],
             calculated_at=_as_datetime(row["calculated_at"]),
             evidence_fingerprint=row["evidence_fingerprint"],
         )

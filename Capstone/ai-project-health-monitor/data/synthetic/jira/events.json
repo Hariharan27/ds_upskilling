@@ -3,9 +3,9 @@
     "event_id": "EVT-JIRA-001",
     "project_id": "PROJ-001",
     "issue_key": "PROJ-101",
-    "status": "blocked",
+    "status": "in_progress",
     "priority": "high",
-    "content": "Payment API integration is blocked. The external API team has not provided the required credentials.",
+    "content": "Payment API integration is unblocked. The external API team has provided the required credentials and integration work has resumed.",
     "author": "developer@example.com",
     "occurred_at": "2026-09-01T09:30:00Z"
   },
