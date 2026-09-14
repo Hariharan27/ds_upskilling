@@ -16,7 +16,7 @@ class RiskEvaluator:
     def __init__(
         self,
         analyze: Callable[
-            [str, list[Evidence]],
+            [str, str, list[Evidence]],
             Sequence[RiskSignal],
         ],
     ) -> None:
@@ -30,6 +30,7 @@ class RiskEvaluator:
         """Evaluate one risk-analysis case."""
         predicted_signals = self._analyze(
             case.project_id,
+            case.query,
             evidence,
         )
 

@@ -22,10 +22,15 @@ from ai_project_health_monitor.analysis.risk_consolidator import (
 from ai_project_health_monitor.analysis.risk_grounding_validator import (
     DeterministicRiskGroundingValidator,
 )
-from ai_project_health_monitor.core.config import Settings, get_settings
+from ai_project_health_monitor.core.config import (
+    ProjectSourceProvider,
+    Settings,
+    get_settings,
+)
 from ai_project_health_monitor.ingestion.connectors.base import (
     ProjectSourceConnector,
 )
+from ai_project_health_monitor.ingestion.connectors.jira import JiraConnector
 from ai_project_health_monitor.ingestion.connectors.synthetic_document import (
     SyntheticDocumentConnector,
 )
@@ -57,11 +62,16 @@ from ai_project_health_monitor.notifications.logging_health_summary_delivery imp
 from ai_project_health_monitor.notifications.logging_health_summary_notifier import (
     LoggingHealthSummaryNotifier,
 )
+from ai_project_health_monitor.observability.config import ObservabilityConfig
+from ai_project_health_monitor.observability.instrumented_llm import (
+    InstrumentedLLMClient,
+)
+from ai_project_health_monitor.observability.langfuse import LangfuseClient
 from ai_project_health_monitor.orchestration.graph import (
     build_project_health_graph,
 )
-from ai_project_health_monitor.persistence.repositories.in_memory_health_snapshot import (
-    InMemoryHealthSnapshotRepository,
+from ai_project_health_monitor.persistence.repositories.postgres_health_snapshot import (
+    PostgresHealthSnapshotRepository,
 )
 from ai_project_health_monitor.rag.chunking import FixedSizeChunker
 from ai_project_health_monitor.rag.embeddings.bge import BGEEmbeddingModel
@@ -97,11 +107,16 @@ from ai_project_health_monitor.services.weekly_health_summary_service import (
 from ai_project_health_monitor.services.weekly_risk_evolution_service import (
     WeeklyRiskEvolutionService,
 )
-from ai_project_health_monitor.observability.config import ObservabilityConfig
-from ai_project_health_monitor.observability.instrumented_llm import (
-    InstrumentedLLMClient,
+from ai_project_health_monitor.analysis.risk_change_detector import (
+    RiskChangeDetector,
 )
-from ai_project_health_monitor.observability.langfuse import LangfuseClient
+from ai_project_health_monitor.analysis.llm_risk_change_investigator import (
+    LLMRiskChangeInvestigator,
+)
+from ai_project_health_monitor.analysis.risk_state_reconciler import (
+    RiskStateReconciler,
+)
+from ai_project_health_monitor.ingestion.connectors.gmail import GmailConnector
 
 
 class ApplicationContainer:
@@ -126,7 +141,9 @@ class ApplicationContainer:
             vector_store=self.vector_store,
         )
 
-        self.health_snapshot_repository = InMemoryHealthSnapshotRepository()
+        self.health_snapshot_repository = PostgresHealthSnapshotRepository(
+            dsn=settings.postgres_dsn,
+        )
 
         self.project_health_evidence_retriever = ProjectHealthEvidenceRetriever(
             retrieval_service=self.retrieval_service,
@@ -174,12 +191,16 @@ class ApplicationContainer:
         )
 
         # Risk analysis
-        risk_analyzer = LLMRiskAnalyzer(
+        self.risk_analyzer = LLMRiskAnalyzer(
             llm_client=self.llm_client,
             grounding_validator=DeterministicRiskGroundingValidator(),
         )
-
         risk_consolidator = RiskConsolidator()
+        risk_change_detector = RiskChangeDetector()
+        risk_change_investigator = LLMRiskChangeInvestigator(
+            llm_client=self.llm_client,
+        )
+        risk_state_reconciler = RiskStateReconciler()
         health_scorer = DeterministicHealthScorer()
 
         summary_generator = LLMHealthSummaryGenerator(
@@ -202,10 +223,17 @@ class ApplicationContainer:
             summary_delivery,
         )
 
+        self.ingestion_service = IngestionService(
+            connectors=self._build_connectors(settings),
+        )
+
         self.graph = build_project_health_graph(
             evidence_retriever=self.project_health_evidence_retriever,
-            risk_analyzer=risk_analyzer,
+            risk_analyzer=self.risk_analyzer,
             risk_consolidator=risk_consolidator,
+            risk_change_detector=risk_change_detector,
+            risk_change_investigator=risk_change_investigator,
+            risk_state_reconciler=risk_state_reconciler,
             health_scorer=health_scorer,
             summary_generator=summary_generator,
             alert_evaluator=alert_evaluator,
@@ -215,15 +243,7 @@ class ApplicationContainer:
             escalation_notifier=escalation_notifier,
             summary_notifier=summary_notifier,
             health_snapshot_repository=self.health_snapshot_repository,
-        )
-
-        self.project_health_monitor = ProjectHealthMonitor(
-            graph=self.graph,
-            health_trend_service=self.health_trend_service,
-        )
-
-        self.health_monitor_scheduler = HealthMonitorScheduler(
-            monitor=self.project_health_monitor,
+            ingestion_service=self.ingestion_service,
         )
 
         self.rag_indexer = RAGIndexer(
@@ -232,8 +252,15 @@ class ApplicationContainer:
             vector_store=self.vector_store,
         )
 
-        self.ingestion_service = IngestionService(
-            connectors=self._build_connectors(settings),
+        self.project_health_monitor = ProjectHealthMonitor(
+            graph=self.graph,
+            health_trend_service=self.health_trend_service,
+            ingestion_service=self.ingestion_service,
+            rag_indexer=self.rag_indexer,
+        )
+
+        self.health_monitor_scheduler = HealthMonitorScheduler(
+            monitor=self.project_health_monitor,
         )
 
 
@@ -241,17 +268,63 @@ class ApplicationContainer:
     def _build_connectors(
         settings: Settings,
     ) -> list[ProjectSourceConnector]:
-        return [
-            SyntheticJiraConnector(
-                source_path=Path(settings.jira_source_path),
-            ),
-            SyntheticEmailConnector(
-                source_path=Path(settings.email_source_path),
-            ),
-            SyntheticDocumentConnector(
-                source_directory=Path(settings.document_source_directory),
-            ),
-        ]
+        connectors: list[ProjectSourceConnector] = []
+
+        if ProjectSourceProvider.SYNTHETIC in settings.project_source_providers:
+            connectors.extend(
+                [
+                    SyntheticJiraConnector(
+                        source_path=Path(settings.jira_source_path),
+                    ),
+                    SyntheticEmailConnector(
+                        source_path=Path(settings.email_source_path),
+                    ),
+                    SyntheticDocumentConnector(
+                        source_directory=Path(settings.document_source_directory),
+                    ),
+                ]
+            )
+
+        if ProjectSourceProvider.JIRA in settings.project_source_providers:
+            if not settings.jira_base_url:
+                raise ValueError("JIRA base URL is required")
+            if not settings.jira_email:
+                raise ValueError("JIRA email is required")
+            if not settings.jira_api_token:
+                raise ValueError("JIRA API token is required")
+            if not settings.jira_project_key:
+                raise ValueError("JIRA project key is required")
+
+            connectors.append(
+                JiraConnector(
+                    base_url=settings.jira_base_url,
+                    email=settings.jira_email,
+                    api_token=settings.jira_api_token,
+                    project_key=settings.jira_project_key,
+                )
+            )
+
+        if ProjectSourceProvider.GMAIL in settings.project_source_providers:
+            credentials_path = Path(settings.gmail_credentials_path)
+
+            if not credentials_path.exists():
+                raise ValueError(
+                    f"Gmail credentials file not found: {credentials_path}"
+                )
+
+            connectors.append(
+                GmailConnector(
+                    credentials_path=credentials_path,
+                    token_path=Path(settings.gmail_token_path),
+                )
+            )
+
+        if not connectors:
+            raise ValueError(
+                "At least one project source provider must be configured"
+            )
+
+        return connectors
 
 
 @lru_cache

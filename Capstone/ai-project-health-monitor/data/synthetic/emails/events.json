@@ -1,13 +1,13 @@
 [
   {
-    "event_id": "EVT-EMAIL-001",
-    "project_id": "PROJ-001",
-    "message_id": "EMAIL-001",
-    "subject": "Payment integration blocked",
-    "sender": "client@example.com",
-    "recipient": "project-team@example.com",
-    "content": "We are concerned that the payment integration is still blocked. This is affecting our planned release date.",
-    "occurred_at": "2026-09-02T11:00:00Z"
+  "event_id": "EVT-EMAIL-001",
+  "project_id": "PROJ-001",
+  "message_id": "EMAIL-001",
+  "subject": "Payment integration unblocked",
+  "sender": "client@example.com",
+  "recipient": "project-team@example.com",
+  "content": "We are pleased that the payment integration is now unblocked. The required credentials have been provided and this is no longer affecting our planned release date.",
+  "occurred_at": "2026-09-14T17:00:00Z"
   },
   {
     "event_id": "EVT-EMAIL-002",

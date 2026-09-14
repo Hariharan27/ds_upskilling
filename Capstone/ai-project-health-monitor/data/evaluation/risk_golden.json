@@ -2,6 +2,7 @@
   {
     "case_id": "RISK-001",
     "project_id": "PROJ-001",
+    "query": "What is blocking the payment API integration?",
     "evidence_event_ids": [
       "EVT-JIRA-001"
     ],
@@ -18,6 +19,7 @@
   {
     "case_id": "RISK-002",
     "project_id": "PROJ-001",
+    "query": "What schedule or delay risks are present in the provided evidence?",
     "evidence_event_ids": [
       "EVT-JIRA-002",
       "EVT-EMAIL-001"
@@ -36,6 +38,7 @@
   {
     "case_id": "RISK-003",
     "project_id": "PROJ-001",
+    "query": "Is there any scope creep in the provided evidence?",
     "evidence_event_ids": [
       "EVT-EMAIL-002"
     ],
@@ -52,6 +55,7 @@
   {
     "case_id": "RISK-004",
     "project_id": "PROJ-001",
+    "query": "What is the current client sentiment about the project?",
     "evidence_event_ids": [
       "EVT-EMAIL-001"
     ],
@@ -68,6 +72,7 @@
   {
     "case_id": "RISK-005",
     "project_id": "PROJ-001",
+    "query": "What blocker and delay risks are present in the provided evidence?",
     "evidence_event_ids": [
       "EVT-JIRA-001",
       "EVT-EMAIL-001"
@@ -88,6 +93,7 @@
   {
     "case_id": "RISK-006",
     "project_id": "PROJ-002",
+    "query": "Are there any project risks in the provided evidence?",
     "evidence_event_ids": [
       "EVT-JIRA-003",
       "EVT-EMAIL-003"
@@ -99,6 +105,7 @@
   {
     "case_id": "RISK-007",
     "project_id": "PROJ-002",
+    "query": "Are there any project risks in the provided evidence?",
     "evidence_event_ids": [
       "EVT-JIRA-003",
       "EVT-EMAIL-003",
@@ -111,6 +118,7 @@
   {
     "case_id": "RISK-008",
     "project_id": "PROJ-001",
+    "query": "Are there any project risks in the provided evidence?",
     "evidence_event_ids": [
       "EVT-JIRA-004",
       "EVT-JIRA-006",

@@ -53,6 +53,7 @@ class FixedSizeChunker(Chunker):
                     content=content[start:end],
                     chunk_index=chunk_index,
                     occurred_at=event.occurred_at,
+                    metadata=event.metadata,
                 )
             )
 

@@ -143,6 +143,7 @@ class LLMRiskAnalyzer(RiskAnalyzer):
                         f"source_type: {item.source_type.value}",
                         f"source_id: {item.source_id}",
                         f"occurred_at: {item.occurred_at.isoformat()}",
+                        f"metadata: {item.metadata}",
                         f"content: {item.content}",
                     ]
                 )
@@ -237,6 +238,30 @@ class LLMRiskAnalyzer(RiskAnalyzer):
     - Report DEPENDENCY only when progress explicitly depends on another
     entity or condition.
     - Do not infer downstream consequences that are not explicitly stated.
+
+    SOURCE LIFECYCLE STATE RULE
+    ---------------------------
+
+    When evidence contains structured lifecycle metadata such as a Jira status,
+    use the current lifecycle state together with the evidence content when
+    deciding whether a risk is currently active.
+
+    For Jira evidence:
+
+    - Treat terminal statuses such as Done, Resolved, or Closed as strong
+    evidence that the associated work item is no longer actively delayed or
+    blocked.
+    - Do NOT report DELAY or BLOCKER solely because historical description text
+    contains words such as "delayed", "behind schedule", or "blocked" when the
+    current Jira status is terminal.
+    - A historical description may still support an active risk only when the
+    provided current evidence explicitly states that the underlying problem
+    remains unresolved despite the terminal status.
+    - Current structured lifecycle state takes precedence over stale historical
+    wording when the two conflict.
+    - Do not assume that every terminal-status item is healthy. Evaluate the
+    current evidence and report other explicitly supported risks when
+    appropriate.
 
     DOWNSTREAM RISK RULE
     --------------------

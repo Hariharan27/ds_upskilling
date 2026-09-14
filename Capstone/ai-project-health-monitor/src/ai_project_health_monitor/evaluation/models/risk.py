@@ -11,6 +11,7 @@ class RiskEvaluationCase(BaseModel):
 
     case_id: str = Field(min_length=1)
     project_id: str = Field(min_length=1)
+    query: str = Field(min_length=1)
     evidence_event_ids: list[str] = Field(min_length=1)
     expected_risk_types: list[RiskType] = Field(default_factory=list)
     expected_severities: list[RiskSeverity] = Field(default_factory=list)

@@ -13,3 +13,4 @@ class Evidence(BaseModel):
     source_id: str = Field(min_length=1)
     content: str = Field(min_length=1)
     occurred_at: datetime
+    metadata: dict[str, str] = Field(default_factory=dict)

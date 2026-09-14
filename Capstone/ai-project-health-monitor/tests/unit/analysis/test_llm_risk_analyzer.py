@@ -407,6 +407,32 @@ def test_prompt_distinguishes_delay_from_delivery() -> None:
     assert "Do NOT use DELIVERY as a synonym for DELAY." in prompt
     assert "Report DELAY only when the evidence explicitly states" in prompt
 
+def test_build_prompt_includes_evidence_metadata() -> None:
+    evidence = Evidence(
+        event_id="EVT-JIRA-001",
+        source_type=SourceType.JIRA,
+        source_id="JIRA-001",
+        content="Real-time delivery tracking is behind schedule.",
+        occurred_at=datetime(
+            2026,
+            9,
+            1,
+            tzinfo=UTC,
+        ),
+        metadata={
+            "status": "Done",
+            "priority": "High",
+        },
+    )
+
+    prompt = LLMRiskAnalyzer._build_prompt(
+        project_id="PROJ-001",
+        query="What risks affect the delivery tracking work?",
+        evidence=[evidence],
+    )
+
+    assert "metadata: {'status': 'Done', 'priority': 'High'}" in prompt
+
 
 def test_parse_response_rejects_unknown_evidence_source_id() -> None:
     evidence = [

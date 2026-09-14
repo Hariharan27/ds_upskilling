@@ -91,6 +91,7 @@ class QdrantVectorStore(VectorStore):
             occurred_at=datetime.fromisoformat(
                 str(payload["occurred_at"])
             ),
+            metadata=dict(payload.get("metadata", {})),
         )
 
         return RetrievalResult(
@@ -122,6 +123,7 @@ class QdrantVectorStore(VectorStore):
                     "content": chunk.content,
                     "chunk_index": chunk.chunk_index,
                     "occurred_at": chunk.occurred_at.isoformat(),
+                    "metadata": chunk.metadata,
                 },
             )
             for chunk, embedding in zip(

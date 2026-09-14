@@ -21,6 +21,14 @@ class LLMProvider(StrEnum):
     OPENAI = "openai"
 
 
+class ProjectSourceProvider(StrEnum):
+    """Supported project information source providers."""
+
+    SYNTHETIC = "synthetic"
+    JIRA = "jira"
+    GMAIL = "gmail"
+
+
 class Settings(BaseSettings):
     """Application configuration loaded from environment variables."""
 
@@ -49,6 +57,7 @@ class Settings(BaseSettings):
     health_monitoring_project_ids: list[str] = Field(
         default_factory=lambda: ["PROJ-001"],
     )
+
     llm_provider: LLMProvider = LLMProvider.OLLAMA
     llm_model: str = Field(
         default="qwen3:8b",
@@ -62,6 +71,7 @@ class Settings(BaseSettings):
 
     together_api_key: str | None = None
     openai_api_key: str | None = None
+
     langfuse_enabled: bool = False
     langfuse_public_key: str | None = None
     langfuse_secret_key: str | None = None
@@ -75,8 +85,27 @@ class Settings(BaseSettings):
         min_length=1,
     )
 
+    project_source_providers: list[ProjectSourceProvider] = Field(
+        default_factory=lambda: [ProjectSourceProvider.SYNTHETIC],
+    )
+
     jira_source_path: str = Field(
         default="data/synthetic/jira/events.json",
+        min_length=1,
+    )
+
+    jira_base_url: str | None = None
+    jira_email: str | None = None
+    jira_api_token: str | None = None
+    jira_project_key: str | None = None
+
+    gmail_credentials_path: str = Field(
+        default="credentials.json",
+        min_length=1,
+    )
+
+    gmail_token_path: str = Field(
+        default="token.json",
         min_length=1,
     )
 
@@ -87,6 +116,14 @@ class Settings(BaseSettings):
 
     document_source_directory: str = Field(
         default="data/synthetic/documents",
+        min_length=1,
+    )
+
+    postgres_dsn: str = Field(
+        default=(
+            "postgresql://postgres:postgres@localhost:5434/"
+            "ai_project_health_monitor"
+        ),
         min_length=1,
     )
 
