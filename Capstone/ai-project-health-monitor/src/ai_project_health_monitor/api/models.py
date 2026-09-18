@@ -14,6 +14,10 @@ class ProjectIndexResponse(BaseModel):
     events_ingested: int = Field(ge=0)
     chunks_indexed: int = Field(ge=0)
 
+class ProjectResponse(BaseModel):
+    """Public representation of a monitored project."""
+
+    project_id: str = Field(min_length=1)
 
 class RiskSignalResponse(BaseModel):
     """Public representation of a detected project risk."""
@@ -69,3 +73,17 @@ class WeeklyHealthSummaryResponse(BaseModel):
     summary: str
     outlook: str
     recommended_actions: list[str]
+
+class HealthHistoryPoint(BaseModel):
+    """Single historical health snapshot exposed by the API."""
+
+    score: float = Field(ge=0.0, le=100.0)
+    status: HealthStatus
+    calculated_at: datetime
+
+
+class HealthHistoryResponse(BaseModel):
+    """Historical health snapshots for a project."""
+
+    project_id: str
+    points: list[HealthHistoryPoint] = Field(default_factory=list)
