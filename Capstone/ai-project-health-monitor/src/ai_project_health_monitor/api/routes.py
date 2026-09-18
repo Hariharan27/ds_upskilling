@@ -7,9 +7,12 @@ from ai_project_health_monitor.api.dependencies import (
     get_application_container,
 )
 from ai_project_health_monitor.api.models import (
+    HealthHistoryPoint,
+    HealthHistoryResponse,
     HealthTrendResponse,
     ProjectHealthResponse,
     ProjectIndexResponse,
+    ProjectResponse,
     RiskSignalResponse,
     WeeklyHealthSummaryResponse,
 )
@@ -18,6 +21,26 @@ router = APIRouter(
     prefix="/api/v1",
     tags=["projects"],
 )
+
+
+@router.get(
+    "/projects",
+    response_model=list[ProjectResponse],
+)
+def get_projects(
+    container: ApplicationContainer = Depends(
+        get_application_container,
+    ),
+) -> list[ProjectResponse]:
+    """Return projects configured for health monitoring."""
+
+    project_ids = container.settings.health_monitoring_project_ids
+
+    return [
+        ProjectResponse(project_id=project_id)
+        for project_id in project_ids
+        if project_id.strip()
+    ]
 
 
 @router.post(
@@ -47,6 +70,61 @@ def index_project(
         events_ingested=len(events),
         chunks_indexed=chunks_indexed,
     )
+
+
+@router.get(
+    "/projects/{project_id}/health",
+    response_model=ProjectHealthResponse,
+)
+def get_project_health(
+    project_id: str,
+    container: ApplicationContainer = Depends(
+        get_application_container,
+    ),
+) -> ProjectHealthResponse:
+    """Return the latest persisted health state for a project."""
+    if not project_id.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="project_id cannot be empty",
+        )
+
+    snapshot = container.health_snapshot_repository.get_latest(
+        project_id,
+    )
+
+    if snapshot is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No health analysis found for project {project_id}",
+        )
+
+    risks = [
+        RiskSignalResponse(
+            signal_id=signal.signal_id,
+            risk_type=signal.risk_type,
+            severity=signal.severity,
+            confidence=signal.confidence,
+            evidence_quote=signal.evidence_quote,
+            rationale=signal.rationale,
+        )
+        for signal in snapshot.risk_signals
+    ]
+
+    return ProjectHealthResponse(
+        project_id=snapshot.project_id,
+        health_score=snapshot.health_score,
+        health_status=snapshot.health_status,
+        rationale=(
+            f"Latest persisted health score is "
+            f"{snapshot.health_score:.1f}/100 and classified as "
+            f"{snapshot.health_status}."
+        ),
+        risks=risks,
+        summary=snapshot.summary,
+        alert_triggered=False,
+    )
+
 
 @router.post(
     "/projects/{project_id}/health",
@@ -130,6 +208,45 @@ def get_project_health_trend(
         score_change=trend.score_change,
     )
 
+@router.get(
+    "/projects/{project_id}/health/history",
+    response_model=HealthHistoryResponse,
+)
+def get_project_health_history(
+    project_id: str,
+    container: ApplicationContainer = Depends(
+        get_application_container,
+    ),
+) -> HealthHistoryResponse:
+    """Return historical health snapshots for a project."""
+    if not project_id.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="project_id cannot be empty",
+        )
+
+    snapshots = container.health_snapshot_repository.get_history(
+        project_id,
+    )
+
+    if not snapshots:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No health history found for project {project_id}",
+        )
+
+    return HealthHistoryResponse(
+        project_id=project_id,
+        points=[
+            HealthHistoryPoint(
+                score=snapshot.health_score,
+                status=snapshot.health_status,
+                calculated_at=snapshot.calculated_at,
+            )
+            for snapshot in snapshots
+        ],
+    )
+
 
 @router.get(
     "/projects/{project_id}/health/weekly-summary",
@@ -195,4 +312,53 @@ def get_project_weekly_health_summary(
         summary=summary.summary,
         outlook=summary.outlook,
         recommended_actions=summary.recommended_actions,
+    )
+
+
+@router.post(
+    "/projects/{project_id}/health/refresh",
+    response_model=ProjectHealthResponse,
+)
+def refresh_project_health(
+    project_id: str,
+    container: ApplicationContainer = Depends(
+        get_application_container,
+    ),
+) -> ProjectHealthResponse:
+    """Ingest current sources, refresh the index, and analyze project health."""
+    if not project_id.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="project_id cannot be empty",
+        )
+
+    result = container.project_health_monitor.run_job(project_id)
+    health_state = result.health_state
+    health_score = health_state.health_score
+
+    if health_score is None:
+        raise RuntimeError(
+            "health_score was not produced by the health workflow"
+        )
+
+    risks = [
+        RiskSignalResponse(
+            signal_id=signal.signal_id,
+            risk_type=signal.risk_type,
+            severity=signal.severity,
+            confidence=signal.confidence,
+            evidence_quote=signal.evidence_quote,
+            rationale=signal.rationale,
+        )
+        for signal in health_state.primary_risks
+    ]
+
+    return ProjectHealthResponse(
+        project_id=health_state.project_id,
+        health_score=health_score.score,
+        health_status=health_score.status,
+        rationale=health_score.rationale,
+        risks=risks,
+        summary=health_state.summary,
+        alert_triggered=health_state.alert_triggered,
     )
